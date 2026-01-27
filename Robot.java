@@ -4,7 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogTrigger;
 import edu.wpi.first.wpilibj.DigitalInput;
+// import edu.wpi.first.wpilibj.Joystick;
 // import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -56,17 +59,53 @@ public class Robot extends TimedRobot {
     SendableRegistry.addChild(m_robotDrive, m_leftFollowSparkMax);
     SendableRegistry.addChild(m_robotDrive, m_rightFollowSparkMax);
       
-    //DigitalInput topLimit = new DigitalInput(0);
-    //SparkMax climbMotor = new SparkMax(2, MotorType.kBrushless);
+    // DigitalInput m_input = new DigitalInput(0);
+    SparkMax climbMotor = new SparkMax(2, MotorType.kBrushless);
+    
+    AnalogTrigger m_Trigger0 = new AnalogTrigger(0);
+    AnalogInput m_input = new AnalogInput(1);
+    AnalogTrigger m_Trigger1 = new AnalogTrigger(m_input);
+    /**
+     * DigitalInput m_toplimitSwitch = new DigitalInput(2);
+    DigitalInput m_bottomlimitSwitch = new DigitalInput(1);
+    SparkMax m_motor1700SparkMax = new SparkMax(13, MotorType.kBrushless); 
+    */
   }
 
   
+
   @Override
   public void teleopPeriodic() {
     m_robotDrive.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX());
     m_robotDrive2.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX());
 
+    DigitalInput m_toplimitSwitch = new DigitalInput(2);
+    DigitalInput m_bottomlimitSwitch = new DigitalInput(1);
+    SparkMax m_motor1700SparkMax = new SparkMax(13, MotorType.kBrushless);
+
+    if (0.1 > 0) {
+      if (m_toplimitSwitch.get()) {
+        // We are going up and top limit is tripped so stop
+        m_motor1700SparkMax.set(0);
+      } 
+      else {
+        // We are going up but top limit is not tripped so go at commanded speed
+        m_motor1700SparkMax.set(1);
+      }
+    } 
+    else {
+      if (m_bottomlimitSwitch.get()) {
+        // We are going down and bottom limit is tripped so stop
+        m_motor1700SparkMax.set(0);
+      } 
+      else {
+        // We are going down but bottom limit is not tripped so go at commanded speed
+        m_motor1700SparkMax.set(0);
+      }
+    }
+
     if (m_controller.getAButton()) {
+      // m_input.get();
 
       // setMotorSpeed(getAButton.getRawAxis(2));
       // m_LimitTestMotor
