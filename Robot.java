@@ -4,22 +4,20 @@
 
 package frc.robot;
 
-import edu.wpi.first.net.PortForwarder;
-import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Joystick;
+// import edu.wpi.first.net.PortForwarder;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 
-import com.revrobotics.ResetMode;
+// import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase.PersistMode;
+// import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.SparkBase;
+// import com.revrobotics.spark.config.SparkBaseConfig;
+// import com.revrobotics.spark.SparkBase;
 
 /**
  * This is a demo program showing the use of the ArcadeDrive class, specifically it contains
@@ -57,6 +55,9 @@ public class Robot extends TimedRobot {
     SendableRegistry.addChild(m_robotDrive, m_rightLeadSparkMax);
     SendableRegistry.addChild(m_robotDrive, m_leftFollowSparkMax);
     SendableRegistry.addChild(m_robotDrive, m_rightFollowSparkMax);
+      
+    //DigitalInput topLimit = new DigitalInput(0);
+    //SparkMax climbMotor = new SparkMax(2, MotorType.kBrushless);
   }
 
   
@@ -66,7 +67,6 @@ public class Robot extends TimedRobot {
     m_robotDrive2.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX());
 
     if (m_controller.getAButton()) {
-      System.out.println("AButton");
 
       // setMotorSpeed(getAButton.getRawAxis(2));
       // m_LimitTestMotor
@@ -112,4 +112,15 @@ public class Robot extends TimedRobot {
   }
   }
 
+
+  /** private final limitClimbThing(double speed) {
+       if (!topLimit.get() && speed > 0 {
+          climbMotor.set(0);
+        }
+        else {
+          climbMotor.set(speed);
+        }
+        );
+      }
+  */
 }
