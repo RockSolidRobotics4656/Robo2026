@@ -159,10 +159,10 @@ public class Robot extends TimedRobot {
       // arcadeDrive(speed, rotation) - rotation = 0 for driving straight
       m_robotDrive.arcadeDrive(0.1, 0, false);
       m_shootMotor.set(.3);
-      system.out.println("auto drive forward")
+      System.out.println("auto drive forward");
     } 
     m_shootMotor.set(.3);
-    System.out.println("auto shoot")
+    System.out.println("auto shoot");
   }
 
 }
