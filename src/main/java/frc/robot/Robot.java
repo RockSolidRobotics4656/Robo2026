@@ -157,12 +157,12 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     if (m_timer.get() < 2.0) {
       // arcadeDrive(speed, rotation) - rotation = 0 for driving straight
-      m_robotDrive.arcadeDrive(0.1, 0);
+      m_robotDrive.arcadeDrive(0.1, 0, false);
+      m_shootMotor.set(.3);
+      system.out.println("auto drive forward")
     } 
-    else {
-      m_robotDrive.stopMotor();
-    }
-
+    m_shootMotor.set(.3);
+    System.out.println("auto shoot")
   }
 
 }
