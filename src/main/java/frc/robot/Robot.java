@@ -34,12 +34,15 @@ public class Robot extends TimedRobot {
   
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftLeadSparkMax::set, m_rightLeadSparkMax::set);
 
-  DigitalInput m_TestlimitSwitch = new DigitalInput(1);
-  SparkMax m_LimitTestMotor = new SparkMax(9, MotorType.kBrushless);
-  SparkMax m_climbMotor = new SparkMax(5, MotorType.kBrushless);
-  SparkMax m_shootMotor = new SparkMax(6, MotorType.kBrushless);
-  SparkMax m_runIntakeMotor = new SparkMax(7, MotorType.kBrushless);
-  SparkMax m_deployIntakeMotor = new SparkMax(8, MotorType.kBrushed);
+  DigitalInput m_climbTopLimitSwitch = new DigitalInput(Climb.kTopLimitSwitchDIOPort);
+  DigitalInput m_climbBottomLimitSwitch = new DigitalInput(Climb.kBottomLimitSwitchDIOPort);
+  SparkMax m_climbMotor = new SparkMax(Climb.kMotorCANID, MotorType.kBrushless);
+  SparkMax m_shootMotor = new SparkMax(Shoot.kMotorCANID, MotorType.kBrushless);
+  SparkMax m_runIntakeMotor = new SparkMax(Intake.kRunMotorCANID, MotorType.kBrushless);
+  SparkMax m_deployIntakeMotor = new SparkMax(Intake.kDeployMotorCANID, MotorType.kBrushed);
+  DigitalInput m_intakeUpLimitSwitch = new DigitalInput(Intake.kUpLimitSwitchDIOPort);
+  DigitalInput m_intakeDownLimitSwitch = new DigitalInput(Intake.kDownLimitSwitchDIOPort);
+
 
   private final XboxController m_controller = new XboxController(0);
 
@@ -52,7 +55,7 @@ public class Robot extends TimedRobot {
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
-    // m_rightLeadSparkMax.setInverted(true);
+    m_rightLeadSparkMax.setInverted(true);
     // m_rightFollowSparkMax.setInverted(true);
     // m_rightLeadSparkMax.configure(new SparkBaseConfig.inverted(true), ResetMode.kFollower, PersistMode.kPersistParameters);
 
@@ -80,21 +83,21 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_robotDrive.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX());
 
-    if (m_controller.getAButtonPressed() & !m_TestlimitSwitch.get()) {
-      m_LimitTestMotor.set(.4);
+    if (m_controller.getAButtonPressed() & !m_climbTopLimitSwitch.get()) {
+      m_climbMotor.set(.4);
     } 
 
-    if (m_controller.getAButtonReleased() | m_TestlimitSwitch.get()) {
-      m_LimitTestMotor.set(.0);
+    if (m_controller.getAButtonReleased() | m_climbTopLimitSwitch.get()) {
+      m_climbMotor.set(.0);
     }
      
-    if (m_controller.getBButtonPressed() & !m_TestlimitSwitch.get()) {
-      m_LimitTestMotor.setInverted(true);
-      m_LimitTestMotor.set(.4);
+    if (m_controller.getBButtonPressed() & !m_climbTopLimitSwitch.get()) {
+      m_climbMotor.setInverted(true);
+      m_climbMotor.set(.4);
     }
-    if (m_controller.getBButtonReleased() | m_TestlimitSwitch.get()) {
-      m_LimitTestMotor.setInverted(false);
-      m_LimitTestMotor.set(.0);
+    if (m_controller.getBButtonReleased() | m_climbTopLimitSwitch.get()) {
+      m_climbMotor.setInverted(false);
+      m_climbMotor.set(.0);
     }
 
 
