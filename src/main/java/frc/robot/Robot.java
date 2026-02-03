@@ -19,6 +19,7 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 // import com.revrobotics.spark.config.SparkBaseConfig;
 // import com.revrobotics.spark.SparkBase;
+import frc.robot.Config.*;
 
 /**
  * This is a demo program showing the use of the ArcadeDrive class, specifically it contains
@@ -26,10 +27,10 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
  */
 public class Robot extends TimedRobot {
 
-  private final SparkMax m_leftLeadSparkMax = new SparkMax(2, MotorType.kBrushless);
-  private final SparkMax m_rightLeadSparkMax = new SparkMax(1, MotorType.kBrushless);
-  private final SparkMax m_leftFollowSparkMax = new SparkMax(3, MotorType.kBrushless);
-  private final SparkMax m_rightFollowSparkMax = new SparkMax(4, MotorType.kBrushless);
+  private final SparkMax m_leftLeadSparkMax = new SparkMax(Drivetrain.kDriveLeftLeadCANID, MotorType.kBrushless);
+  private final SparkMax m_rightLeadSparkMax = new SparkMax(Drivetrain.kDriveRightLeadCANID, MotorType.kBrushless);
+  private final SparkMax m_leftFollowSparkMax = new SparkMax(Drivetrain.kDriveLeftFollowCANID, MotorType.kBrushless);
+  private final SparkMax m_rightFollowSparkMax = new SparkMax(Drivetrain.kDriveRightFollowCANID, MotorType.kBrushless);
   
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftLeadSparkMax::set, m_rightLeadSparkMax::set);
 
