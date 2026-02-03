@@ -1,9 +1,9 @@
 package frc.robot;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
+// import com.revrobotics.spark.SparkMax;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+// import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Config {
     public class Drivetrain {
@@ -18,10 +18,12 @@ public class Config {
         public static final int kTopLimitSwitchDIOPort = 1;
         public static final int kBottomLimitSwitchDIOPort = 2;
         public static final int kMotorCANID = 5;
+        public static final double kMotorSpeed = .2;
     }
 
     public class Shoot{
         public static final int kMotorCANID = 6;
+        public static final double kMotorSpeed = .2;
     }
 
     public class Intake{
@@ -29,8 +31,8 @@ public class Config {
         public static final int kDownLimitSwitchDIOPort = 4;
         public static final int kRunMotorCANID = 7;
         public static final int kDeployMotorCANID = 8;
+        public static final double kDeployMotorSpeed = .2;
+        public static final double kRunMotorSpeed = .2;
     }
     
-    
-
 }
