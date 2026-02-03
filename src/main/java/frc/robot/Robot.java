@@ -5,24 +5,17 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-// import edu.wpi.first.wpilibj.AnalogInput;
-// import edu.wpi.first.wpilibj.AnalogTrigger;
-// import edu.wpi.first.wpilibj.DigitalInput;
-// import edu.wpi.first.wpilibj.Joystick;
-// import edu.wpi.first.net.PortForwarder;
 // import edu.wpi.first.wpilibj2.command.InstantCommand;
-// import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
-// import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
-// import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 // import com.revrobotics.spark.config.SparkBaseConfig;
 // import com.revrobotics.spark.SparkBase;
@@ -39,11 +32,13 @@ public class Robot extends TimedRobot {
   private final SparkMax m_rightFollowSparkMax = new SparkMax(4, MotorType.kBrushless);
   
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftLeadSparkMax::set, m_rightLeadSparkMax::set);
-  // private final DifferentialDrive m_robotDrive2 = new DifferentialDrive(m_leftFollowSparkMax::set, m_rightFollowSparkMax::set);
 
   DigitalInput m_TestlimitSwitch = new DigitalInput(1);
   SparkMax m_LimitTestMotor = new SparkMax(9, MotorType.kBrushless);
-
+  SparkMax m_climbMotor = new SparkMax(5, MotorType.kBrushless);
+  SparkMax m_shootMotor = new SparkMax(6, MotorType.kBrushless);
+  SparkMax m_runIntakeMotor = new SparkMax(7, MotorType.kBrushless);
+  SparkMax m_deployIntakeMotor = new SparkMax(8, MotorType.kBrushed);
 
   private final XboxController m_controller = new XboxController(0);
 
