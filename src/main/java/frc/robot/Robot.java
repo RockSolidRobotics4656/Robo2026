@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 // import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -38,7 +39,7 @@ public class Robot extends TimedRobot {
   private final SparkMax m_rightLeadSparkMax = 
     new SparkMax(Drivetrain.kDriveRightLeadCANID, MotorType.kBrushless);
   private final SparkMax m_leftFollowSparkMax = 
-    new SparkMax(Drivetrain.kDriveLeftFollowCANID, MotorType.kBrushless);
+   new SparkMax(Drivetrain.kDriveLeftFollowCANID, MotorType.kBrushless);
   private final SparkMax m_rightFollowSparkMax = 
     new SparkMax(Drivetrain.kDriveRightFollowCANID, MotorType.kBrushless);
   
@@ -81,6 +82,11 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void teleopInit() {
+    CommandScheduler.getInstance().disable();
+  }
+
+  @Override
   public void teleopPeriodic() {
     // drive command, using the left stick only
     m_robotDrive.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX());
@@ -92,22 +98,26 @@ public class Robot extends TimedRobot {
     // left bumper is climb
     if (m_controller.getAButtonPressed() & !m_intakeDownLimitSwitch.get() & !m_intakeUpLimitSwitch.get()) {
       m_deployIntakeMotor.set(Intake.kDeployMotorSpeed);
+          System.out.println("deploy intake");
       // deploy intake
     } 
 
     if (m_controller.getAButtonReleased() | m_intakeDownLimitSwitch.get() | m_intakeUpLimitSwitch.get()) {
       m_deployIntakeMotor.set(.0);
+          System.out.println("deploy intake stop");
     }
      
     if (m_controller.getBButtonPressed() & !m_intakeUpLimitSwitch.get() & !m_intakeDownLimitSwitch.get()) {
       m_deployIntakeMotor.setInverted(true);
       m_deployIntakeMotor.set(Intake.kDeployMotorSpeed);
+      System.out.println("deploy intake bring in");
       // bring in intake
     }
 
     if (m_controller.getBButtonReleased() | m_intakeUpLimitSwitch.get() | m_intakeDownLimitSwitch.get()) {
       m_deployIntakeMotor.setInverted(false);
       m_deployIntakeMotor.set(.0);
+          System.out.println("deploy intake bring in stop");
     }
 
     if (m_controller.getYButtonPressed()) {
@@ -151,18 +161,23 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_timer.restart();
+    CommandScheduler.getInstance();
   }
 
   @Override
   public void autonomousPeriodic() {
     if (m_timer.get() < 2.0) {
+      CommandScheduler.getInstance().run();
       // arcadeDrive(speed, rotation) - rotation = 0 for driving straight
       m_robotDrive.arcadeDrive(0.1, 0, false);
       m_shootMotor.set(.3);
       System.out.println("auto drive forward");
     } 
-    m_shootMotor.set(.3);
+    if (m_timer.get() > 2.0 & m_timer.get() < 3.0);
+    m_shootMotor.set(Shoot.kMotorSpeed);
     System.out.println("auto shoot");
+    //m_shootMotor.set(0);
+    //m_shootMotor.set(Shoot.kMotorSpeed);
   }
 
 }
