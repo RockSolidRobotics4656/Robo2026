@@ -91,6 +91,9 @@ public class Robot extends TimedRobot {
     // drive command, using the left stick only
     m_robotDrive.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX());
 
+    if (m_controller.getRightStickButtonPressed()) {
+    }
+
     // button bindings
     // A and B are to deploy/bring back in the intake
     // X is shoot
@@ -166,14 +169,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    if (m_timer.get() < 2.0) {
+    if (m_timer.get() < 3.0) {
       CommandScheduler.getInstance().run();
       // arcadeDrive(speed, rotation) - rotation = 0 for driving straight
       m_robotDrive.arcadeDrive(0.1, 0, false);
       m_shootMotor.set(.3);
       System.out.println("auto drive forward");
     } 
-    if (m_timer.get() > 2.0 & m_timer.get() < 3.0);
+    if (m_timer.get() > 3.0 & m_timer.get() < 5.0);
     m_shootMotor.set(Shoot.kMotorSpeed);
     System.out.println("auto shoot");
     //m_shootMotor.set(0);
