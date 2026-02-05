@@ -59,6 +59,7 @@ public class Robot extends TimedRobot {
   SparkMax m_deployIntakeMotor = new SparkMax(Intake.kDeployMotorCANID, MotorType.kBrushed);
   DigitalInput m_intakeUpLimitSwitch = new DigitalInput(Intake.kUpLimitSwitchDIOPort);
   DigitalInput m_intakeDownLimitSwitch = new DigitalInput(Intake.kDownLimitSwitchDIOPort);
+  Boolean m_intakeIsMoving = false;
   
 
   /** Called once at the beginning of the robot program. */
@@ -91,36 +92,48 @@ public class Robot extends TimedRobot {
     // drive command, using the left stick only
     m_robotDrive.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX());
 
-    if (m_controller.getRightStickButtonPressed()) {
-    }
-
     // button bindings
     // A and B are to deploy/bring back in the intake
     // X is shoot
     // Y is run intake
     // left bumper is climb
-    if (m_controller.getAButtonPressed() & !m_intakeDownLimitSwitch.get() & !m_intakeUpLimitSwitch.get()) {
-      m_deployIntakeMotor.set(Intake.kDeployMotorSpeed);
+    // System.out.println(m_intakeUpLimitSwitch.get()); 
+    // System.out.println(m_controller.getAButtonPressed());
+
+    if (m_controller.getAButtonPressed() &
+      !m_intakeDownLimitSwitch.get()) {
+        m_deployIntakeMotor.set(Intake.kDeployMotorSpeed);
+        m_intakeIsMoving = true;
           System.out.println("deploy intake");
       // deploy intake
     } 
 
-    if (m_controller.getAButtonReleased() | m_intakeDownLimitSwitch.get() | m_intakeUpLimitSwitch.get()) {
-      m_deployIntakeMotor.set(.0);
+
+    if (m_intakeIsMoving & (m_controller.getAButtonReleased() | 
+      m_intakeDownLimitSwitch.get())) {
+        m_deployIntakeMotor.set(.0);
+        m_intakeIsMoving = false;
+        //while (m_intakeUpLimitSwitch.get()) {
+          
+        //}
           System.out.println("deploy intake stop");
     }
      
-    if (m_controller.getBButtonPressed() & !m_intakeUpLimitSwitch.get() & !m_intakeDownLimitSwitch.get()) {
+    if (m_controller.getBButtonPressed() &  
+    !m_intakeUpLimitSwitch.get()) {
+      m_intakeIsMoving = true;
       m_deployIntakeMotor.setInverted(true);
       m_deployIntakeMotor.set(Intake.kDeployMotorSpeed);
-      System.out.println("deploy intake bring in");
+      System.out.println("retract intake");
       // bring in intake
     }
 
-    if (m_controller.getBButtonReleased() | m_intakeUpLimitSwitch.get() | m_intakeDownLimitSwitch.get()) {
+    if (m_intakeIsMoving & (m_controller.getBButtonReleased() | 
+    m_intakeUpLimitSwitch.get())) {
+      m_intakeIsMoving = false;
       m_deployIntakeMotor.setInverted(false);
-      m_deployIntakeMotor.set(.0);
-          System.out.println("deploy intake bring in stop");
+      m_deployIntakeMotor.set(0);
+          System.out.println("retract intake stop");
     }
 
     if (m_controller.getYButtonPressed()) {
@@ -154,7 +167,6 @@ public class Robot extends TimedRobot {
     }
 
     if (m_controller.getLeftBumperButtonReleased() | m_climbTopLimitSwitch.get()) {
-      System.out.println("stop climb");
       m_climbMotor.set(0);
       // stop climb
     }
@@ -169,6 +181,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+    // most basic auto program
     if (m_timer.get() < 3.0) {
       CommandScheduler.getInstance().run();
       // arcadeDrive(speed, rotation) - rotation = 0 for driving straight
