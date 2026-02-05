@@ -50,6 +50,7 @@ public class Robot extends TimedRobot {
   DigitalInput m_climbTopLimitSwitch = new DigitalInput(Climb.kTopLimitSwitchDIOPort);
   DigitalInput m_climbBottomLimitSwitch = new DigitalInput(Climb.kBottomLimitSwitchDIOPort);
   SparkMax m_climbMotor = new SparkMax(Climb.kMotorCANID, MotorType.kBrushless);
+  Boolean m_climbIsMoving = false;
 
   // shooter objects
   SparkMax m_shootMotor = new SparkMax(Shoot.kMotorCANID, MotorType.kBrushless);
@@ -168,6 +169,22 @@ public class Robot extends TimedRobot {
 
     if (m_controller.getLeftBumperButtonReleased() | m_climbTopLimitSwitch.get()) {
       m_climbMotor.set(0);
+      // stop climb
+    }
+
+        if ((m_controller.getRightBumperButtonPressed() & !m_climbBottomLimitSwitch.get())) {
+      System.out.println("un-climb");
+      m_climbIsMoving = true;
+      m_climbMotor.setInverted(true);
+      m_climbMotor.set(Climb.kMotorSpeed);
+      // climb
+    }
+
+    if (m_climbIsMoving & (m_controller.getRightBumperButtonReleased() | m_climbBottomLimitSwitch.get())) {
+      m_climbMotor.set(0);
+      m_climbIsMoving = false;
+      m_climbMotor.setInverted(true);
+      System.out.println("un-climb stop");
       // stop climb
     }
 
