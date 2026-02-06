@@ -15,6 +15,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
+import java.util.function.IntFunction;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -206,11 +209,19 @@ public class Robot extends TimedRobot {
       m_shootMotor.set(.3);
       System.out.println("auto drive forward");
     } 
-    if (m_timer.get() > 3.0 & m_timer.get() < 5.0);
+    if (m_timer.get() > 3.0 & m_timer.get() < 5.0) {
     m_shootMotor.set(Shoot.kMotorSpeed);
     System.out.println("auto shoot");
     //m_shootMotor.set(0);
     //m_shootMotor.set(Shoot.kMotorSpeed);
-  }
+    }
+    if (m_timer.get() > 5 & m_timer.get() < 8) {
+    m_robotDrive.arcadeDrive(0.1, 0, false);
+    }
+    if (m_timer.get() > 8){
+      m_robotDrive.arcadeDrive(0, 0.06);
+    }
+  } 
+
 
 }
