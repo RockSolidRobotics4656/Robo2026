@@ -140,16 +140,31 @@ public class Robot extends TimedRobot {
           System.out.println("retract intake stop");
     }
 
-    if (m_controller.getYButtonPressed()) {
+    if (m_controller.getLeftBumperButtonPressed()) {
       System.out.println("run intake");
       m_runIntakeMotor.set(Intake.kRunMotorSpeed);
       // run intake
     }
 
-    if (m_controller.getYButtonReleased()) {
+    if (m_controller.getLeftBumperButtonReleased()) {
       System.out.println("stop intake");
       m_runIntakeMotor.set(0);
       // stop intake
+    }
+
+    
+    if (m_controller.getRightBumperButtonPressed()) {
+      System.out.println("run outtake");
+      m_runIntakeMotor.setInverted(true);
+      m_runIntakeMotor.set(Intake.kRunMotorSpeed);
+      // run intake
+    }
+
+    if (m_controller.getRightBumperButtonReleased()) {
+      System.out.println("stop outtake");
+      m_runIntakeMotor.setInverted(false);
+      m_runIntakeMotor.set(0);
+      // stop outtake
     }
 
     if (m_controller.getXButtonPressed()) {
@@ -164,18 +179,18 @@ public class Robot extends TimedRobot {
       // stop shoot
     }
 
-    if (m_controller.getLeftBumperButtonPressed() & !m_climbTopLimitSwitch.get()) {
+    if (m_controller.getYButtonPressed() & !m_climbTopLimitSwitch.get()) {
       System.out.println("climb");
       m_climbMotor.set(Climb.kMotorSpeed);
       // climb
     }
 
-    if (m_controller.getLeftBumperButtonReleased() | m_climbTopLimitSwitch.get()) {
+    if (m_controller.getYButtonReleased() | m_climbTopLimitSwitch.get()) {
       m_climbMotor.set(0);
       // stop climb
     }
 
-        if ((m_controller.getRightBumperButtonPressed() & !m_climbBottomLimitSwitch.get())) {
+        if ((m_controller.getRightStickButtonPressed() & !m_climbBottomLimitSwitch.get())) {
       System.out.println("un-climb");
       m_climbIsMoving = true;
       m_climbMotor.setInverted(true);
@@ -183,7 +198,7 @@ public class Robot extends TimedRobot {
       // climb
     }
 
-    if (m_climbIsMoving & (m_controller.getRightBumperButtonReleased() | m_climbBottomLimitSwitch.get())) {
+    if (m_climbIsMoving & (m_controller.getRightStickButtonReleased() | m_climbBottomLimitSwitch.get())) {
       m_climbMotor.set(0);
       m_climbIsMoving = false;
       m_climbMotor.setInverted(true);
