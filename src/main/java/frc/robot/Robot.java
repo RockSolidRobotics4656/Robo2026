@@ -11,15 +11,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 // import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.revrobotics.spark.SparkMax;
 // import com.revrobotics.spark.config.LimitSwitchConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 // import com.revrobotics.spark.config.SparkParameters;
- 
 // import java.util.function.IntFunction;
-
 import com.revrobotics.PersistMode;
 // import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -114,7 +111,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    CommandScheduler.getInstance().disable();
+    // CommandScheduler.getInstance().disable();
   }
 
   @Override
@@ -242,7 +239,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_timer.restart();
-    CommandScheduler.getInstance();
+    // CommandScheduler.getInstance();
   }
 
   @Override
@@ -280,7 +277,7 @@ public class Robot extends TimedRobot {
     //RETRIEVAL
     /*-------------------------------------------------------- */
     if (m_timer.get() < 2.0) {
-
+      
     }
 
   } 
