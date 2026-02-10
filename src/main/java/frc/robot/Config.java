@@ -2,13 +2,14 @@ package frc.robot;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 // import com.revrobotics.spark.SparkMax;
+// import com.revrobotics.spark.config.SparkMaxConfig;
 
 // import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Config {
     public class Drivetrain {
         public static final int kDriveLeftLeadCANID = 2;
-        public static final int kDriveLeftFollowCANID = 3;
+        public static final int kDriveLeftFollowCANID = 9;
         public static final int kDriveRightLeadCANID = 1;
         public static final int kDriveRightFollowCANID = 4;
         public static final MotorType kDriveMotorType = MotorType.kBrushless;

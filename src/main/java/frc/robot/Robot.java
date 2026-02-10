@@ -14,18 +14,21 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.revrobotics.spark.SparkMax;
+// import com.revrobotics.spark.config.LimitSwitchConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+// import com.revrobotics.spark.config.SparkParameters;
 
-import java.util.function.IntFunction;
+// import java.util.function.IntFunction;
 
 import com.revrobotics.PersistMode;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 // import com.revrobotics.spark.config.SparkBaseConfig;
 // import com.revrobotics.spark.SparkBase;
 import frc.robot.Config.*;
 
-/**
+/*
  * This is a demo program showing the use of the ArcadeDrive class, specifically it contains
  * the code necessary to operate a robot with tank drive.
  */
@@ -42,18 +45,24 @@ public class Robot extends TimedRobot {
   private final SparkMax m_rightLeadSparkMax = 
     new SparkMax(Drivetrain.kDriveRightLeadCANID, MotorType.kBrushless);
   private final SparkMax m_leftFollowSparkMax = 
-   new SparkMax(Drivetrain.kDriveLeftFollowCANID, MotorType.kBrushless);
+    new SparkMax(Drivetrain.kDriveLeftFollowCANID, MotorType.kBrushless);
   private final SparkMax m_rightFollowSparkMax = 
     new SparkMax(Drivetrain.kDriveRightFollowCANID, MotorType.kBrushless);
-  
+  private final SparkMaxConfig rightConfig = 
+    new SparkMaxConfig();
   private final DifferentialDrive m_robotDrive = 
     new DifferentialDrive(m_leftLeadSparkMax::set, m_rightLeadSparkMax::set);
+  //private RelativeEncoder m_driveEncoder;
+
+  //m_driveEncoder = m_leftLeadSparkMax.getEncoder();
 
   // climb objects
   DigitalInput m_climbTopLimitSwitch = new DigitalInput(Climb.kTopLimitSwitchDIOPort);
   DigitalInput m_climbBottomLimitSwitch = new DigitalInput(Climb.kBottomLimitSwitchDIOPort);
   SparkMax m_climbMotor = new SparkMax(Climb.kMotorCANID, MotorType.kBrushless);
   Boolean m_climbIsMoving = false;
+  SparkMaxConfig climbUpConfig = new SparkMaxConfig();
+  SparkMaxConfig climbDownConfig = new SparkMaxConfig();
 
   // shooter objects
   SparkMax m_shootMotor = new SparkMax(Shoot.kMotorCANID, MotorType.kBrushless);
@@ -64,15 +73,22 @@ public class Robot extends TimedRobot {
   DigitalInput m_intakeUpLimitSwitch = new DigitalInput(Intake.kUpLimitSwitchDIOPort);
   DigitalInput m_intakeDownLimitSwitch = new DigitalInput(Intake.kDownLimitSwitchDIOPort);
   Boolean m_intakeIsMoving = false;
+  SparkMaxConfig upIntakeConfig = new SparkMaxConfig();
+  SparkMaxConfig downIntakeConfig = new SparkMaxConfig();
+  SparkMaxConfig runIntakeInConfig = new SparkMaxConfig();
+  SparkMaxConfig runIntakeOutConfig = new SparkMaxConfig();
+
   
 
-  /** Called once at the beginning of the robot program. */
+  /* Called once at the beginning of the robot program. */
   public Robot() {
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
-    m_rightLeadSparkMax.setInverted(true);
-
+    rightConfig.inverted(true);
+    m_rightLeadSparkMax.configure
+      (rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    
     // set up for followers in drivetrain
     SparkMaxConfig leftFollowConfig = new SparkMaxConfig();
     leftFollowConfig.follow(2);
@@ -83,6 +99,16 @@ public class Robot extends TimedRobot {
     rightFollowConfig.follow(1);
     m_rightFollowSparkMax.configure
       (rightFollowConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    //climb config
+    climbUpConfig.inverted(false);
+    climbDownConfig.inverted(true);
+
+    //intake config
+    downIntakeConfig.inverted(false);
+    upIntakeConfig.inverted(true);
+    runIntakeInConfig.inverted(false);
+    runIntakeOutConfig.inverted(true);
       // end of Robot class
   }
 
@@ -106,12 +132,13 @@ public class Robot extends TimedRobot {
 
     if (m_controller.getAButtonPressed() &
       !m_intakeDownLimitSwitch.get()) {
+        m_deployIntakeMotor.configure
+          (downIntakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         m_deployIntakeMotor.set(Intake.kDeployMotorSpeed);
         m_intakeIsMoving = true;
           System.out.println("deploy intake");
       // deploy intake
     } 
-
 
     if (m_intakeIsMoving & (m_controller.getAButtonReleased() | 
       m_intakeDownLimitSwitch.get())) {
@@ -126,7 +153,8 @@ public class Robot extends TimedRobot {
     if (m_controller.getBButtonPressed() &  
     !m_intakeUpLimitSwitch.get()) {
       m_intakeIsMoving = true;
-      m_deployIntakeMotor.setInverted(true);
+      m_deployIntakeMotor.configure
+        (upIntakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       m_deployIntakeMotor.set(Intake.kDeployMotorSpeed);
       System.out.println("retract intake");
       // bring in intake
@@ -135,13 +163,14 @@ public class Robot extends TimedRobot {
     if (m_intakeIsMoving & (m_controller.getBButtonReleased() | 
     m_intakeUpLimitSwitch.get())) {
       m_intakeIsMoving = false;
-      m_deployIntakeMotor.setInverted(false);
       m_deployIntakeMotor.set(0);
           System.out.println("retract intake stop");
     }
 
     if (m_controller.getLeftBumperButtonPressed()) {
       System.out.println("run intake");
+      m_deployIntakeMotor.configure
+        (runIntakeInConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       m_runIntakeMotor.set(Intake.kRunMotorSpeed);
       // run intake
     }
@@ -155,14 +184,14 @@ public class Robot extends TimedRobot {
     
     if (m_controller.getRightBumperButtonPressed()) {
       System.out.println("run outtake");
-      m_runIntakeMotor.setInverted(true);
+      m_runIntakeMotor.configure
+        (runIntakeOutConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       m_runIntakeMotor.set(Intake.kRunMotorSpeed);
       // run intake
     }
 
     if (m_controller.getRightBumperButtonReleased()) {
       System.out.println("stop outtake");
-      m_runIntakeMotor.setInverted(false);
       m_runIntakeMotor.set(0);
       // stop outtake
     }
@@ -181,6 +210,8 @@ public class Robot extends TimedRobot {
 
     if (m_controller.getYButtonPressed() & !m_climbTopLimitSwitch.get()) {
       System.out.println("climb");
+      m_climbMotor.configure
+        (climbUpConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       m_climbMotor.set(Climb.kMotorSpeed);
       // climb
     }
@@ -193,7 +224,8 @@ public class Robot extends TimedRobot {
         if ((m_controller.getRightStickButtonPressed() & !m_climbBottomLimitSwitch.get())) {
       System.out.println("un-climb");
       m_climbIsMoving = true;
-      m_climbMotor.setInverted(true);
+      m_climbMotor.configure
+        (climbDownConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       m_climbMotor.set(Climb.kMotorSpeed);
       // climb
     }
@@ -201,7 +233,6 @@ public class Robot extends TimedRobot {
     if (m_climbIsMoving & (m_controller.getRightStickButtonReleased() | m_climbBottomLimitSwitch.get())) {
       m_climbMotor.set(0);
       m_climbIsMoving = false;
-      m_climbMotor.setInverted(true);
       System.out.println("un-climb stop");
       // stop climb
     }
@@ -217,6 +248,13 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     // most basic auto program
+     /* 
+     * AUTO #1
+     * -----------------------------------
+     * move & shoot & move
+     * ---------------------------------
+     * */
+    /* 
     if (m_timer.get() < 3.0) {
       CommandScheduler.getInstance().run();
       // arcadeDrive(speed, rotation) - rotation = 0 for driving straight
@@ -234,9 +272,17 @@ public class Robot extends TimedRobot {
     m_robotDrive.arcadeDrive(0.1, 0, false);
     }
     if (m_timer.get() > 8){
-      m_robotDrive.arcadeDrive(0, 0.06);
+      m_robotDrive.arcadeDrive(0, 0.6);
     }
-  } 
+      */
+    /*--------------------------------------------------------- */
+    //auto #2
+    //RETRIEVAL
+    /*-------------------------------------------------------- */
+    if (m_timer.get() < 2.0) {
 
+    }
+
+  } 
 
 }
