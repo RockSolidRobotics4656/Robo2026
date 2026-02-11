@@ -5,30 +5,19 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-// import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-// import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 import com.revrobotics.spark.SparkMax;
-// import com.revrobotics.spark.config.LimitSwitchConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-// import com.revrobotics.spark.config.SparkParameters;
-// import java.util.function.IntFunction;
 import com.revrobotics.PersistMode;
-// import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-// import com.revrobotics.spark.config.SparkBaseConfig;
-// import com.revrobotics.spark.SparkBase;
 import frc.robot.Config.*;
 
-/*
- * This is a demo program showing the use of the ArcadeDrive class, specifically it contains
- * the code necessary to operate a robot with tank drive.
- */
+// Arcade drive robot, using an xbox controller and CANsparkmax motor controllers.
 public class Robot extends TimedRobot {
   // definitions and objects. see config for ids
 
@@ -49,9 +38,6 @@ public class Robot extends TimedRobot {
     new SparkMaxConfig();
   private final DifferentialDrive m_robotDrive = 
     new DifferentialDrive(m_leftLeadSparkMax::set, m_rightLeadSparkMax::set);
-  //private RelativeEncoder m_driveEncoder;
-
-  //m_driveEncoder = m_leftLeadSparkMax.getEncoder();
 
   // climb objects
   DigitalInput m_climbTopLimitSwitch = new DigitalInput(Climb.kTopLimitSwitchDIOPort);
@@ -110,9 +96,7 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopInit() {
-    // CommandScheduler.getInstance().disable();
-  }
+  public void teleopInit() {}
 
   @Override
   public void teleopPeriodic() {
@@ -120,14 +104,13 @@ public class Robot extends TimedRobot {
     m_robotDrive.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX());
     double kSpeed = m_controller.getRightY();
     m_shootMotor.set(kSpeed);
+
     // button bindings
     // A and B are to deploy/bring back in the intake
     // X is shoot
     // bumpers run intake in and out
     // Y is climb
-    // System.out.println(m_intakeUpLimitSwitch.get()); 
-    // System.out.println(m_controller.getAButtonPressed());
-/** 
+
     if (m_controller.getAButtonPressed() &
       !m_intakeDownLimitSwitch.get()) {
         m_deployIntakeMotor.configure
@@ -142,10 +125,7 @@ public class Robot extends TimedRobot {
       m_intakeDownLimitSwitch.get())) {
         m_deployIntakeMotor.set(.0);
         m_intakeIsMoving = false;
-        //while (m_intakeUpLimitSwitch.get()) {
-          
-        //}
-          System.out.println("deploy intake stop");
+        System.out.println("deploy intake stop");
     }
      
     if (m_controller.getBButtonPressed() &  
@@ -233,7 +213,7 @@ public class Robot extends TimedRobot {
       m_climbIsMoving = false;
       System.out.println("un-climb stop");
       // stop climb
-    }*/
+    }
 
   }
 
