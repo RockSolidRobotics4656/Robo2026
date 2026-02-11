@@ -9,7 +9,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 public class Config {
     public class Drivetrain {
         public static final int kDriveLeftLeadCANID = 2;
-        public static final int kDriveLeftFollowCANID = 9;
+        public static final int kDriveLeftFollowCANID = 3;
         public static final int kDriveRightLeadCANID = 1;
         public static final int kDriveRightFollowCANID = 4;
         public static final MotorType kDriveMotorType = MotorType.kBrushless;
@@ -23,17 +23,17 @@ public class Config {
     }
 
     public class Shoot{
-        public static final int kMotorCANID = 6;
-        public static final double kMotorSpeed = .2;
+        public static final int kMotorCANID = 14;
+        public static final double kMotorSpeed = 1;
     }
 
     public class Intake{
         public static final int kUpLimitSwitchDIOPort = 0;
         public static final int kDownLimitSwitchDIOPort = 1;
-        public static final int kRunMotorCANID = 7;
+        public static final int kRunMotorCANID = 6;
         public static final int kDeployMotorCANID = 8;
         public static final double kDeployMotorSpeed = .2;
-        public static final double kRunMotorSpeed = .2;
+        public static final double kRunMotorSpeed = 1;
     }
     
 }

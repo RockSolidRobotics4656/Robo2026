@@ -118,15 +118,16 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // drive command, using the left stick only
     m_robotDrive.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX());
-
+    double kSpeed = m_controller.getRightY();
+    m_shootMotor.set(kSpeed);
     // button bindings
     // A and B are to deploy/bring back in the intake
     // X is shoot
-    // Y is run intake
-    // left bumper is climb
+    // bumpers run intake in and out
+    // Y is climb
     // System.out.println(m_intakeUpLimitSwitch.get()); 
     // System.out.println(m_controller.getAButtonPressed());
-
+/** 
     if (m_controller.getAButtonPressed() &
       !m_intakeDownLimitSwitch.get()) {
         m_deployIntakeMotor.configure
@@ -232,7 +233,7 @@ public class Robot extends TimedRobot {
       m_climbIsMoving = false;
       System.out.println("un-climb stop");
       // stop climb
-    }
+    }*/
 
   }
 
@@ -277,7 +278,7 @@ public class Robot extends TimedRobot {
     //RETRIEVAL
     /*-------------------------------------------------------- */
     if (m_timer.get() < 2.0) {
-      
+
     }
 
   } 
