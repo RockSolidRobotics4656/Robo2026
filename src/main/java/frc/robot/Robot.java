@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import frc.robot.Config.*;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -15,8 +16,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import frc.robot.Config.*;
 
+/* ----------------------------------------------------------------- */
 // Arcade drive robot, using an xbox controller and CANsparkmax motor controllers.
 public class Robot extends TimedRobot {
   // definitions and objects. see config for ids
@@ -64,6 +65,8 @@ public class Robot extends TimedRobot {
   
 
   /* Called once at the beginning of the robot program. */
+  /* ---------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------- */
   public Robot() {
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
@@ -96,8 +99,11 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
 
+  }
+
+  /* ---------------------------------------------- */
   @Override
   public void teleopPeriodic() {
     // drive command, using the left stick only
@@ -105,11 +111,13 @@ public class Robot extends TimedRobot {
     double kSpeed = m_controller.getRightY();
     m_shootMotor.set(kSpeed);
 
+    /* ---------------------------------------------- */
     // button bindings
     // A and B are to deploy/bring back in the intake
     // X is shoot
     // bumpers run intake in and out
     // Y is climb
+    /* ---------------------------------------------- */
 
     if (m_controller.getAButtonPressed() &
       !m_intakeDownLimitSwitch.get()) {
@@ -258,8 +266,55 @@ public class Robot extends TimedRobot {
     //RETRIEVAL
     /*-------------------------------------------------------- */
     if (m_timer.get() < 2.0) {
+      m_robotDrive.arcadeDrive(0, .5);
+    }
+
+    if (m_timer.get() < 5.0 & m_timer.get() > 2.0) {
+      m_robotDrive.arcadeDrive(.8, 0);
+      m_shootMotor.set(Shoot.kMotorSpeed);
+    }
+
+    if (m_timer.get() > 5 & m_timer.get() < 8) {
+      m_robotDrive.arcadeDrive(.8, 0);
+    }
+
+    if (m_timer.get() > 8 & m_timer.get() < 10) {
+      m_robotDrive.arcadeDrive(0, .5);
+    }
+
+    if (m_timer.get() > 10 & m_timer.get() < 15) {
+      m_robotDrive.arcadeDrive(.7, .0);
+    }
+
+    if (!m_intakeIsMoving & (m_timer.get() > 11 & m_timer.get() < 20 & !m_intakeDownLimitSwitch.get())) {
+      m_deployIntakeMotor.set(Intake.kDeployMotorSpeed);
 
     }
+
+    if(m_timer.get() > 11 & m_timer.get() < 20) {
+      m_runIntakeMotor.set(Intake.kRunMotorSpeed);
+    }
+    /* ----------------------------------------------------------------------------------------------- */
+    // end of auto #2
+    /* ----------------------------------------------------------------------------------------------- */
+    /* ---------------------------------------------------------------------------------------------- */
+    // auto # 3
+    // climb
+    /* ------------------------------------------------------------------------------------------ */
+    /* 
+    if (m_timer.get() < 2.0) {
+      m_robotDrive.arcadeDrive(0, .5);
+    }
+
+    if (m_timer.get() >  2.0  & !m_climbIsMoving & !m_climbTopLimitSwitch.get()) {
+      m_robotDrive.arcadeDrive(.8, 0);
+      m_climbMotor.set(.6);
+      m_climbIsMoving = true;
+    }   */
+   /* ---------------------------------------------------------------------------  */
+   // AUTO # 4
+   // 
+   /* ---------------------------------------------------------------------------  */
 
   } 
 
