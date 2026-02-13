@@ -49,7 +49,9 @@ public class Robot extends TimedRobot {
   SparkMaxConfig climbDownConfig = new SparkMaxConfig();
 
   // shooter objects
-  SparkMax m_shootMotor = new SparkMax(Shoot.kMotorCANID, MotorType.kBrushless);
+  SparkMax m_shootMotor = new SparkMax(Shoot.kRunMotorCANID, MotorType.kBrushless);
+  SparkMax m_kickMotor = new SparkMax(Shoot.kKickMotorCANID, MotorType.kBrushed);
+  final Timer m_timeSave = new Timer();
 
   // intake objects
   SparkMax m_runIntakeMotor = new SparkMax(Intake.kRunMotorCANID, MotorType.kBrushless);
@@ -100,7 +102,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-
   }
 
   /* ---------------------------------------------- */
@@ -110,7 +111,7 @@ public class Robot extends TimedRobot {
     m_robotDrive.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX());
     double kSpeed = m_controller.getRightY();
     m_shootMotor.set(kSpeed);
-
+    double m_shootTime = 0.0;
     /* ---------------------------------------------- */
     // button bindings
     // A and B are to deploy/bring back in the intake
@@ -184,13 +185,20 @@ public class Robot extends TimedRobot {
 
     if (m_controller.getXButtonPressed()) {
       System.out.println("shoot");
-      m_shootMotor.set(Shoot.kMotorSpeed);
+      m_shootMotor.set(Shoot.kRunMotorSpeed);
+      m_shootTime = m_timer.get();
       // shoot
+    } 
+
+    if ((m_controller.getLeftTriggerAxis() > 0) & (m_timer.get() - m_shootTime > .25)) {
+      m_kickMotor.set(Shoot.kKickMotorSpeed);
+      System.out.println(m_shootTime);
     }
 
     if (m_controller.getXButtonReleased()) {
       System.out.println("stop shoot");
       m_shootMotor.set(0);
+      m_kickMotor.set(0);
       // stop shoot
     }
 
@@ -271,7 +279,7 @@ public class Robot extends TimedRobot {
 
     if (m_timer.get() < 5.0 & m_timer.get() > 2.0) {
       m_robotDrive.arcadeDrive(.8, 0);
-      m_shootMotor.set(Shoot.kMotorSpeed);
+      m_shootMotor.set(Shoot.kRunMotorSpeed);
     }
 
     if (m_timer.get() > 5 & m_timer.get() < 8) {
@@ -313,7 +321,6 @@ public class Robot extends TimedRobot {
     }   */
    /* ---------------------------------------------------------------------------  */
    // AUTO # 4
-   // 
    /* ---------------------------------------------------------------------------  */
 
   } 
