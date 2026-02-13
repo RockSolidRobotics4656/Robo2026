@@ -44,5 +44,9 @@ public class Config {
         public static final double kDeployMotorSpeed = .2;
         public static final double kRunMotorSpeed = 1;
     }
+
+    public class Auto {
+        public static final int kautoVariable = 3;
+    }
     
 }
