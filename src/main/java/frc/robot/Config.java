@@ -21,26 +21,26 @@ public class Config {
     }
 
     public class Climb{ 
-        public static final int kTopLimitSwitchDIOPort = 3;
-        public static final int kBottomLimitSwitchDIOPort = 9;
-        public static final int kMotorCANID = 5;
+        public static final int kTopLimitSwitchDIOPort = 6;
+        public static final int kBottomLimitSwitchDIOPort = 8;
+        public static final int kMotorCANID = 10;
         public static final double kMotorSpeed = .2;
     }
 
     public class Shoot{
-        public static final int kRunMotorCANID = 14;
-        public static final double kRunMotorSpeed = 1;
-        public static final int kKickMotorCANID = 12;
-        public static final double kKickMotorSpeed = 1;
+        public static final int kRunMotorCANID = 8;
+        public static final double kRunMotorSpeed = .4;
+        public static final int kBackKickMotorCANID = 7;
+        public static final double kKickMotorSpeed = .4;
         public static double m_savedTime = 0.0; 
 
     }
 
     public class Intake{
-        public static final int kUpLimitSwitchDIOPort = 0;
-        public static final int kDownLimitSwitchDIOPort = 1;
+        public static final int kUpLimitSwitchDIOPort = 9;
+        public static final int kDownLimitSwitchDIOPort = 8;
         public static final int kRunMotorCANID = 6;
-        public static final int kDeployMotorCANID = 8;
+        public static final int kDeployMotorCANID = 5;
         public static final double kDeployMotorSpeed = .2;
         public static final double kRunMotorSpeed = 1;
     }

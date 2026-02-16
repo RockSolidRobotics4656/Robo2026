@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
     SparkMax m_shootMotor = new SparkMax
       (Shoot.kRunMotorCANID, MotorType.kBrushless);
     SparkMax m_kickMotor = new SparkMax
-      (Shoot.kKickMotorCANID, MotorType.kBrushed);
+      (Shoot.kBackKickMotorCANID, MotorType.kBrushed);
     
     //timer
     final Timer m_timeSave = new Timer();
