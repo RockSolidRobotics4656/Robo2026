@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.cameraserver.CameraServer;
 
 // REVLIB specific imports. If errored, download REVLIB.
 import com.revrobotics.spark.SparkMax;
@@ -29,7 +30,7 @@ public class Robot extends TimedRobot {
   private final XboxController m_controller = 
     new XboxController(0);
   private final Timer m_timer = 
-    new Timer();
+   new Timer();
 
   // drivetrain objects
   private final SparkMax m_leftLeadSparkMax = 
@@ -116,7 +117,11 @@ public class Robot extends TimedRobot {
     upIntakeConfig.inverted(true);
     runIntakeInConfig.inverted(false);
     runIntakeOutConfig.inverted(true);
-      // end of Robot class
+
+    // camera config 
+    CameraServer.startAutomaticCapture();
+
+    // end of Robot class
   }
 
   @Override
@@ -295,12 +300,12 @@ public class Robot extends TimedRobot {
     }*/
      /* --------------------------------- */
      
-    if (m_timer.get() < 3.0 & Auto.kautoVariable >= 1 & Auto.kautoVariable <= 1) {
+    /*if (m_timer.get() < 3.0 & Auto.kautoVariable >= 1 & Auto.kautoVariable <= 1) {
       // arcadeDrive(speed, rotation) - rotation = 0 for driving straight
       m_robotDrive.arcadeDrive(0.1, 0, false);
       m_shootMotor.set(.3);
       System.out.println("auto drive forward");
-    } 
+    } */
     if (m_timer.get() > 3.0 & m_timer.get() < 5.0 & 
       Auto.kautoVariable >= 1 & Auto.kautoVariable <= 1) {
         m_shootMotor.set(Shoot.kRunMotorSpeed);
