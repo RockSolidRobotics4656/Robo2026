@@ -13,18 +13,18 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.CvSink;
-import edu.wpi.first.cscore.CvSource;
-import edu.wpi.first.cscore.UsbCamera;
+//import edu.wpi.first.cscore.CvSink;
+//import edu.wpi.first.cscore.CvSource;
+//import edu.wpi.first.cscore.UsbCamera;
 
 // REVLIB specific imports. If errored, download REVLIB.
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
+//import org.opencv.core.Mat;
+//import org.opencv.core.Point;
+//import org.opencv.core.Scalar;
+//import org.opencv.imgproc.Imgproc;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
