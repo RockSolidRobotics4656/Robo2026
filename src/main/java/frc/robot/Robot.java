@@ -13,10 +13,19 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
 
 // REVLIB specific imports. If errored, download REVLIB.
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -31,57 +40,80 @@ public class Robot extends TimedRobot {
     new XboxController(0);
   private final Timer m_timer = 
    new Timer();
+  Thread m_visionThread;
 
   // drivetrain objects
-  private final SparkMax m_leftLeadSparkMax = 
-    new SparkMax(Drivetrain.kDriveLeftLeadCANID, MotorType.kBrushless);
-  private final SparkMax m_rightLeadSparkMax = 
-    new SparkMax(Drivetrain.kDriveRightLeadCANID, MotorType.kBrushless);
-  private final SparkMax m_leftFollowSparkMax = 
-    new SparkMax(Drivetrain.kDriveLeftFollowCANID, MotorType.kBrushless);
-  private final SparkMax m_rightFollowSparkMax = 
-    new SparkMax(Drivetrain.kDriveRightFollowCANID, MotorType.kBrushless);
-  private final SparkMaxConfig rightConfig = 
-    new SparkMaxConfig();
-  private final DifferentialDrive m_robotDrive = 
-    new DifferentialDrive(m_leftLeadSparkMax::set, m_rightLeadSparkMax::set);
+    // motors
+    private final SparkMax m_leftLeadSparkMax = 
+      new SparkMax(Drivetrain.kDriveLeftLeadCANID, MotorType.kBrushless);
+    private final SparkMax m_rightLeadSparkMax = 
+      new SparkMax(Drivetrain.kDriveRightLeadCANID, MotorType.kBrushless);
+    private final SparkMax m_leftFollowSparkMax = 
+      new SparkMax(Drivetrain.kDriveLeftFollowCANID, MotorType.kBrushless);
+    private final SparkMax m_rightFollowSparkMax = 
+      new SparkMax(Drivetrain.kDriveRightFollowCANID, MotorType.kBrushless);
+
+    // motor config declaration (not configured here) 
+    private final SparkMaxConfig rightConfig = 
+      new SparkMaxConfig();
+    
+    // motor group (followers grouped later)
+    private final DifferentialDrive m_robotDrive = 
+      new DifferentialDrive(m_leftLeadSparkMax::set, m_rightLeadSparkMax::set);
 
   // climb objects
-  DigitalInput m_climbTopLimitSwitch = 
-    new DigitalInput(Climb.kTopLimitSwitchDIOPort);
-  DigitalInput m_climbBottomLimitSwitch = 
-    new DigitalInput(Climb.kBottomLimitSwitchDIOPort);
-  SparkMax m_climbMotor = 
-    new SparkMax(Climb.kMotorCANID, MotorType.kBrushless);
-  Boolean m_climbIsMoving = false;
-  SparkMaxConfig climbUpConfig = new SparkMaxConfig();
-  SparkMaxConfig climbDownConfig = new SparkMaxConfig();
+    // limit switches
+    DigitalInput m_climbTopLimitSwitch = 
+      new DigitalInput(Climb.kTopLimitSwitchDIOPort);
+    DigitalInput m_climbBottomLimitSwitch = 
+      new DigitalInput(Climb.kBottomLimitSwitchDIOPort);
+
+    // motor
+    SparkMax m_climbMotor = 
+      new SparkMax(Climb.kMotorCANID, MotorType.kBrushless);
+
+    // variable
+    Boolean m_climbIsMoving = false;
+
+    // motor config declarations (not declared here)
+    SparkMaxConfig climbUpConfig = new SparkMaxConfig();
+    SparkMaxConfig climbDownConfig = new SparkMaxConfig();
 
   // shooter objects
-  SparkMax m_shootMotor = new SparkMax
-    (Shoot.kRunMotorCANID, MotorType.kBrushless);
-  SparkMax m_kickMotor = new SparkMax
-    (Shoot.kKickMotorCANID, MotorType.kBrushed);
-  final Timer m_timeSave = new Timer();
+    //motors
+    SparkMax m_shootMotor = new SparkMax
+      (Shoot.kRunMotorCANID, MotorType.kBrushless);
+    SparkMax m_kickMotor = new SparkMax
+      (Shoot.kKickMotorCANID, MotorType.kBrushed);
+    
+    //timer
+    final Timer m_timeSave = new Timer();
 
   // intake objects
-  SparkMax m_runIntakeMotor = 
-    new SparkMax(Intake.kRunMotorCANID, MotorType.kBrushless);
-  SparkMax m_deployIntakeMotor = 
-    new SparkMax(Intake.kDeployMotorCANID, MotorType.kBrushed);
-  DigitalInput m_intakeUpLimitSwitch = 
-    new DigitalInput(Intake.kUpLimitSwitchDIOPort);
-  DigitalInput m_intakeDownLimitSwitch = 
-    new DigitalInput(Intake.kDownLimitSwitchDIOPort);
-  Boolean m_intakeIsMoving = false;
-  SparkMaxConfig upIntakeConfig = 
-    new SparkMaxConfig();
-  SparkMaxConfig downIntakeConfig = 
-    new SparkMaxConfig();
-  SparkMaxConfig runIntakeInConfig = 
-    new SparkMaxConfig();
-  SparkMaxConfig runIntakeOutConfig = 
-    new SparkMaxConfig();
+    // motors
+    SparkMax m_runIntakeMotor = 
+      new SparkMax(Intake.kRunMotorCANID, MotorType.kBrushless);
+    SparkMax m_deployIntakeMotor = 
+      new SparkMax(Intake.kDeployMotorCANID, MotorType.kBrushed);
+
+    // limit switches
+    DigitalInput m_intakeUpLimitSwitch = 
+      new DigitalInput(Intake.kUpLimitSwitchDIOPort);
+    DigitalInput m_intakeDownLimitSwitch = 
+      new DigitalInput(Intake.kDownLimitSwitchDIOPort);
+
+    // variable
+    Boolean m_intakeIsMoving = false;
+
+    // motor config declaration (not configured here)
+    SparkMaxConfig upIntakeConfig = 
+      new SparkMaxConfig();
+    SparkMaxConfig downIntakeConfig = 
+      new SparkMaxConfig();
+    SparkMaxConfig runIntakeInConfig = 
+      new SparkMaxConfig();
+    SparkMaxConfig runIntakeOutConfig = 
+      new SparkMaxConfig();
 
   
 
@@ -121,8 +153,52 @@ public class Robot extends TimedRobot {
     // camera config 
     CameraServer.startAutomaticCapture();
 
+    /* 
+    // We'll see camera code
+    m_visionThread =new Thread(() -> {
+      // Get the UsbCamera from CameraServer
+      UsbCamera camera = CameraServer.startAutomaticCapture();
+
+      // Set the resolution
+      camera.setResolution(1000, 600);
+
+      // Get a CvSink. This will capture Mats from the camera
+      CvSink cvSink = CameraServer.getVideo();
+              
+      // Setup a CvSource. This will send images back to the Dashboard
+      CvSource outputStream = CameraServer.putVideo("Rectangle", 1000, 600);
+
+      // Mats are very memory expensive. Lets reuse this Mat.
+      Mat mat = new Mat();
+
+      // This cannot be 'true'. The program will never exit if it is. This
+      // lets the robot stop this thread when restarting robot code or
+      // deploying.
+      while (!Thread.interrupted()) {
+
+      // Tell the CvSink to grab a frame from the camera and put it
+      // in the source mat.  If there is an error notify the output.
+        if (cvSink.grabFrame(mat) == 0) {
+
+        // Send the output the error.
+          outputStream.notifyError(cvSink.getError());
+
+          // skip the rest of the current iteration
+          continue;
+        }
+
+        // Put a rectangle on the image
+        Imgproc.rectangle(
+          mat, new Point(100, 100), new Point(400, 400), new Scalar(255, 255, 255), 5);
+        // Give the output stream a new image to display
+        outputStream.putFrame(mat);
+      }
+    });
+    m_visionThread.setDaemon(true);
+    m_visionThread.start();*/
     // end of Robot class
   }
+
 
   @Override
   public void teleopInit() {
