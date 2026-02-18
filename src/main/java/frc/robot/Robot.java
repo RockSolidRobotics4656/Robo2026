@@ -62,6 +62,8 @@ public class Robot extends TimedRobot {
     // motor group (followers grouped later)
     private final DifferentialDrive m_robotDrive = 
       new DifferentialDrive(m_leftLeadSparkMax::set, m_rightLeadSparkMax::set);
+    private final DifferentialDrive m_robotDrive2 = 
+      new DifferentialDrive(m_leftFollowSparkMax::set, m_rightFollowSparkMax::set);
 
   // climb objects
     // limit switches 
@@ -133,14 +135,14 @@ public class Robot extends TimedRobot {
 
     // set up for followers in drivetrain
     SparkMaxConfig leftFollowConfig = new SparkMaxConfig();
-    leftFollowConfig.follow(Drivetrain.kDriveLeftLeadCANID);
+    //leftFollowConfig.follow(Drivetrain.kDriveLeftLeadCANID);
     //leftFollowConfig.inverted(true);
     m_leftFollowSparkMax.configure(leftFollowConfig, 
       ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     SparkMaxConfig rightFollowConfig = new SparkMaxConfig();
     rightFollowConfig.inverted(true);
-    rightFollowConfig.follow(Drivetrain.kDriveRightLeadCANID);
+    //rightFollowConfig.follow(Drivetrain.kDriveRightLeadCANID);
     m_rightFollowSparkMax.configure(rightFollowConfig, 
       ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -226,6 +228,7 @@ public class Robot extends TimedRobot {
 
     // drive command, using the left stick only.
     m_robotDrive.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX());
+    m_robotDrive2.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX());
     double kSpeed = m_controller.getRightY();
     m_shootMotor.set(kSpeed);
     double m_shootTime = 0.0;
