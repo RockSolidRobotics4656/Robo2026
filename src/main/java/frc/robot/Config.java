@@ -37,12 +37,12 @@ public class Config {
     }
 
     public class Intake{
-        public static final int kUpLimitSwitchDIOPort = 9;
-        public static final int kDownLimitSwitchDIOPort = 8;
+        public static final int kUpLimitSwitchDIOPort = 8;
+        public static final int kDownLimitSwitchDIOPort = 9;
         public static final int kRunMotorCANID = 6;
         public static final int kDeployMotorCANID = 5;
         public static final double kDeployMotorSpeed = .2;
-        public static final double kRunMotorSpeed = 1;
+        public static final double kRunMotorSpeed = .5;
     }
 
     public class Auto {

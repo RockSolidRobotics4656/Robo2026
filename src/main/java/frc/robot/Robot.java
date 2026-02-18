@@ -7,12 +7,13 @@ package frc.robot;
 import frc.robot.Config.*;
 
 // WPI imports
+import edu.wpi.first.hal.DIOJNI;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.cameraserver.CameraServer;
+//import edu.wpi.first.cameraserver.CameraServer;
 //import edu.wpi.first.cscore.CvSink;
 //import edu.wpi.first.cscore.CvSource;
 //import edu.wpi.first.cscore.UsbCamera;
@@ -29,6 +30,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkLowLevel;
 
 /* ----------------------------------------------------------------- */
 // Arcade drive robot, using an xbox controller and CANsparkmax motor controllers.
@@ -40,7 +42,7 @@ public class Robot extends TimedRobot {
     new XboxController(0);
   private final Timer m_timer = 
    new Timer();
-  Thread m_visionThread;
+   Thread m_visionThread;
 
   // drivetrain objects
     // motors
@@ -62,12 +64,12 @@ public class Robot extends TimedRobot {
       new DifferentialDrive(m_leftLeadSparkMax::set, m_rightLeadSparkMax::set);
 
   // climb objects
-    // limit switches
-    DigitalInput m_climbTopLimitSwitch = 
-      new DigitalInput(Climb.kTopLimitSwitchDIOPort);
-    DigitalInput m_climbBottomLimitSwitch = 
-      new DigitalInput(Climb.kBottomLimitSwitchDIOPort);
-
+    // limit switches 
+    //DigitalInput m_climbTopLimitSwitch = 
+      //new DigitalInput(Climb.kTopLimitSwitchDIOPort);
+    //DigitalInput m_climbBottomLimitSwitch = 
+      //new DigitalInput(Climb.kBottomLimitSwitchDIOPort);
+/* 
     // motor
     SparkMax m_climbMotor = 
       new SparkMax(Climb.kMotorCANID, MotorType.kBrushless);
@@ -77,7 +79,7 @@ public class Robot extends TimedRobot {
 
     // motor config declarations (not declared here)
     SparkMaxConfig climbUpConfig = new SparkMaxConfig();
-    SparkMaxConfig climbDownConfig = new SparkMaxConfig();
+    SparkMaxConfig climbDownConfig = new SparkMaxConfig();*/
 
   // shooter objects
     //motors
@@ -92,7 +94,7 @@ public class Robot extends TimedRobot {
   // intake objects
     // motors
     SparkMax m_runIntakeMotor = 
-      new SparkMax(Intake.kRunMotorCANID, MotorType.kBrushless);
+      new SparkMax(Intake.kRunMotorCANID, MotorType.kBrushed);
     SparkMax m_deployIntakeMotor = 
       new SparkMax(Intake.kDeployMotorCANID, MotorType.kBrushed);
 
@@ -128,21 +130,23 @@ public class Robot extends TimedRobot {
     rightConfig.inverted(true);
     m_rightLeadSparkMax.configure(rightConfig, 
       ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    
+
     // set up for followers in drivetrain
     SparkMaxConfig leftFollowConfig = new SparkMaxConfig();
     leftFollowConfig.follow(Drivetrain.kDriveLeftLeadCANID);
+    //leftFollowConfig.inverted(true);
     m_leftFollowSparkMax.configure(leftFollowConfig, 
       ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     SparkMaxConfig rightFollowConfig = new SparkMaxConfig();
+    rightFollowConfig.inverted(true);
     rightFollowConfig.follow(Drivetrain.kDriveRightLeadCANID);
     m_rightFollowSparkMax.configure(rightFollowConfig, 
       ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     //climb config
-    climbUpConfig.inverted(false);
-    climbDownConfig.inverted(true);
+    //climbUpConfig.inverted(false);
+    //climbDownConfig.inverted(true);
 
     //intake config
     downIntakeConfig.inverted(false);
@@ -151,11 +155,10 @@ public class Robot extends TimedRobot {
     runIntakeOutConfig.inverted(true);
 
     // camera config 
-    CameraServer.startAutomaticCapture();
+    //CameraServer.startAutomaticCapture();
 
-    /* 
     // We'll see camera code
-    m_visionThread =new Thread(() -> {
+    /*m_visionThread =new Thread(() -> {
       // Get the UsbCamera from CameraServer
       UsbCamera camera = CameraServer.startAutomaticCapture();
 
@@ -202,7 +205,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    //System.out.println("up");
+    //System.out.println(m_intakeUpLimitSwitch.get());
+    //System.out.println("down");
+    //System.out.println(m_intakeDownLimitSwitch.get());
     // this runs once at the start of teleop
+    
+    //System.out.println("right lead canid");
+    //System.out.println(m_rightLeadSparkMax.getDeviceId());
+    
   }
 
   /* ---------------------------------------------- */
@@ -308,7 +319,7 @@ public class Robot extends TimedRobot {
       m_kickMotor.set(0);
       // stop shoot
     }
-
+/* 
     if (m_controller.getYButtonPressed() & !m_climbTopLimitSwitch.get()) {
       System.out.println("climb");
       m_climbMotor.configure(climbUpConfig,
@@ -337,7 +348,7 @@ public class Robot extends TimedRobot {
         m_climbIsMoving = false;
         System.out.println("un-climb stop");
         // stop climb
-    }
+    }*/
 
   }
 
@@ -448,12 +459,12 @@ public class Robot extends TimedRobot {
       m_robotDrive.arcadeDrive(0, .5);
     }
 
-    if (m_timer.get() >  2.0  & !m_climbIsMoving & !m_climbTopLimitSwitch.get() 
+    /*if (m_timer.get() >  2.0  & !m_climbIsMoving & !m_climbTopLimitSwitch.get() 
       & Auto.kautoVariable >= 3 & Auto.kautoVariable <= 3) {
         m_robotDrive.arcadeDrive(.8, 0);
         m_climbMotor.set(.6);
         m_climbIsMoving = true;
-    }   
+    }   */
    /* ---------------------------------------------------------------------------  */
    // AUTO # 4
    //
