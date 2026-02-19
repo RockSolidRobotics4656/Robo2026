@@ -41,7 +41,7 @@ public class Config {
         public static final int kDownLimitSwitchDIOPort = 9;
         public static final int kRunMotorCANID = 6;
         public static final int kDeployMotorCANID = 5;
-        public static final double kDeployMotorSpeed = .4;
+        public static final double kDeployMotorSpeed = .3;
         public static final double kRunMotorSpeed = .5;
     }
 
