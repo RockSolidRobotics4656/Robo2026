@@ -83,11 +83,17 @@ public class Robot extends TimedRobot {
     //motors
     SparkMax m_shootMotor = new SparkMax
       (Shoot.kRunMotorCANID, MotorType.kBrushless);
-    SparkMax m_kickMotor = new SparkMax
+    SparkMax m_backKickMotor = new SparkMax
       (Shoot.kBackKickMotorCANID, MotorType.kBrushed);
+    SparkMax m_frontKickMotor = new SparkMax
+      (Shoot.kFrontKickMotorCANID, MotorType.kBrushed);
     
     //timer
     final Timer m_timeSave = new Timer();
+
+    //config
+    SparkMaxConfig frontKickConfig = 
+      new SparkMaxConfig();
 
   // intake objects
     // motors
@@ -129,6 +135,10 @@ public class Robot extends TimedRobot {
     m_rightLeadSparkMax.configure(rightConfig, 
       ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     
+    frontKickConfig.inverted(true);
+    m_frontKickMotor.configure(frontKickConfig, 
+      ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
     // set up for followers in drivetrain
     SparkMaxConfig leftFollowConfig = new SparkMaxConfig();
     leftFollowConfig.follow(Drivetrain.kDriveLeftLeadCANID);
@@ -215,8 +225,8 @@ public class Robot extends TimedRobot {
 
     // drive command, using the left stick only.
     m_robotDrive.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX());
-    double kSpeed = m_controller.getRightY();
-    m_shootMotor.set(kSpeed);
+    // double kSpeed = m_controller.getRightY();
+    // m_shootMotor.set(kSpeed);
     double m_shootTime = 0.0;
     /* ---------------------------------------------------------- */
     // button bindings
@@ -274,7 +284,6 @@ public class Robot extends TimedRobot {
       // stop intake
     }
 
-    
     if (m_controller.getRightBumperButtonPressed()) {
       System.out.println("run outtake");
       m_runIntakeMotor.configure(runIntakeOutConfig,
@@ -296,16 +305,18 @@ public class Robot extends TimedRobot {
       // shoot
     } 
 
-    if ((m_controller.getLeftTriggerAxis() > 0) & 
+    if (m_controller.getXButtonPressed() & 
       (m_timer.get() - m_shootTime > .25)) {
-        m_kickMotor.set(Shoot.kKickMotorSpeed);
+        m_backKickMotor.set(Shoot.kKickMotorSpeed);
+        m_frontKickMotor.set(Shoot.kKickMotorSpeed);
         System.out.println(m_shootTime);
     }
 
     if (m_controller.getXButtonReleased()) {
       System.out.println("stop shoot");
       m_shootMotor.set(0);
-      m_kickMotor.set(0);
+      m_backKickMotor.set(0);
+      m_frontKickMotor.set(0);
       // stop shoot
     }
 

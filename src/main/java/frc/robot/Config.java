@@ -31,7 +31,8 @@ public class Config {
         public static final int kRunMotorCANID = 8;
         public static final double kRunMotorSpeed = .4;
         public static final int kBackKickMotorCANID = 7;
-        public static final double kKickMotorSpeed = .4;
+         public static final int kFrontKickMotorCANID = 9;
+        public static final double kKickMotorSpeed = 1;
         public static double m_savedTime = 0.0; 
 
     }
