@@ -82,6 +82,9 @@ public class Robot extends TimedRobot {
     SparkMax m_kickMotor = new SparkMax
       (Shoot.kBackKickMotorCANID, MotorType.kBrushed);
     
+    // variable
+    Boolean shootIsMoving = false;
+    
     //timer
     final Timer m_timeSave = new Timer();
 
@@ -316,25 +319,52 @@ public class Robot extends TimedRobot {
       // stop outtake
     }
 
-    if (m_controller.getXButtonPressed()) {
+    /*if (m_controller.getXButtonPressed()) {
+      m_shootTime = Timer.getMatchTime();
+    }*/
+    /* 
+    if (m_controller.getXButton() & (Timer.getMatchTime() - m_shootTime) > .25) {
+      m_kickMotor.set(Shoot.kKickMotorSpeed);
+    }*/
+
+    if (m_controller.getXButton()) {
+      System.out.println("shoot");
+      m_shootMotor.set(Shoot.kRunMotorSpeed);
+      // m_shootMotor.set(1);
+    } 
+    else {
+      m_shootMotor.set(Shoot.kStoppedMotor);
+      m_kickMotor.set(Shoot.kStoppedMotor);
+    } 
+
+    /*if (m_controller.getXButtonPressed()) {
+      m_shootTime = Timer.getMatchTime();
+      System.out.println(m_shootTime);
+    }*/
+
+    /*if (m_controller.getXButtonPressed() & !shootIsMoving) {
       System.out.println("shoot");
       m_shootMotor.set(Shoot.kRunMotorSpeed);
       m_shootTime = Timer.getMatchTime();
+      shootIsMoving = true;
       // shoot
     } 
 
-    if ((m_controller.getLeftTriggerAxis() > 0) & 
-      (Timer.getMatchTime() - m_shootTime > .25)) {
+    if (Timer.getMatchTime() - m_shootTime > .25 & m_controller.getXButton()) {
         m_kickMotor.set(Shoot.kKickMotorSpeed);
-        System.out.println(m_shootTime);
+        // System.out.println(m_shootTime);
+        shootIsMoving = true;
+        System.out.println(m_kickMotor);
     }
 
-    if (m_controller.getXButtonReleased()) {
+
+    if (m_controller.getXButtonReleased() & shootIsMoving) {
       System.out.println("stop shoot");
       m_shootMotor.set(0);
       m_kickMotor.set(0);
+      shootIsMoving = false;
       // stop shoot
-    }
+    }*/
 /* 
     if (m_controller.getYButtonPressed() & !m_climbTopLimitSwitch.get()) {
       System.out.println("climb");
@@ -367,6 +397,10 @@ public class Robot extends TimedRobot {
     }*/
 
   }
+
+  /* ------------------------------------------------------- */
+  // AUTO START
+  /* ------------------------------------------------------- */
 
   @Override
   public void autonomousInit() {
@@ -409,15 +443,18 @@ public class Robot extends TimedRobot {
       m_shootMotor.set(.3);
       System.out.println("auto drive forward");
     } */
+
     if (m_timer.get() > 3.0 & m_timer.get() < 5.0 & 
       Auto.kautoVariable == 1) {
         m_shootMotor.set(Shoot.kRunMotorSpeed);
         System.out.println("auto shoot");
     }
+
     if (m_timer.get() > 5 & m_timer.get() < 8 & 
       Auto.kautoVariable == 1) {
     m_robotDrive.arcadeDrive(0.1, 0, false);
     }
+
     if (m_timer.get() > 8 & m_timer.get() < 20 & 
       Auto.kautoVariable == 1){
         m_robotDrive.arcadeDrive(0, 0.6);
@@ -451,7 +488,7 @@ public class Robot extends TimedRobot {
       & Auto.kautoVariable == 2) {
         m_robotDrive.arcadeDrive(.7, .0);
     }
-
+ 
     if (!m_intakeIsMoving & (m_timer.get() > 11 & m_timer.get() < 20 & 
       !m_intakeDownLimitSwitch.get()) & Auto.kautoVariable == 2) {
         m_deployIntakeMotor.set(Intake.kDeployMotorMaxSpeed);
@@ -462,6 +499,7 @@ public class Robot extends TimedRobot {
       & Auto.kautoVariable == 2) {
         m_runIntakeMotor.set(Intake.kRunMotorSpeed);
     }
+
     /* ----------------------------------------------------------------------------------------------- */
     // end of auto #2
     /* ----------------------------------------------------------------------------------------------- */
@@ -487,6 +525,34 @@ public class Robot extends TimedRobot {
    if (Timer.getMatchTime() > 0 & Auto.kautoVariable == 4) {
     m_shootMotor.set(Shoot.kRunMotorSpeed);
    }
+
+   if (Timer.getMatchTime() < 4 & Timer.getMatchTime() > 6) {
+    m_robotDrive.arcadeDrive(.6, 0);
+    m_robotDrive2.arcadeDrive(.6, 0);
+   }
+
+   /*if () {
+
+   }*/
+
+   /* ------------------------------------------------------- */
+   // Auto #5
+   // Move for 4 sec at 60% simple
+   /* ------------------------------------------------------- */
+   if (Timer.getMatchTime() > 0 & Timer.getMatchTime() < 4 & Auto.kautoVariable == 5) {
+    m_robotDrive.arcadeDrive(0.6, 0);
+    m_robotDrive2.arcadeDrive(0.6, 0);
+   }
+
+   /* ------------------------------------------------------------------------------------ */
+   // Auto #6
+   // Right position
+   //
+   /* ------------------------------------------------------------------------------------ */
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 4) {
+    
+   }
+
   } 
 
 }
