@@ -79,7 +79,7 @@ public class Robot extends TimedRobot {
     //motors
     SparkMax m_shootMotor = new SparkMax
       (Shoot.kRunMotorCANID, MotorType.kBrushless);
-    SparkMax m_kickMotor = new SparkMax
+    SparkMax m_backKickMotor = new SparkMax
       (Shoot.kBackKickMotorCANID, MotorType.kBrushed);
     
     // variable
@@ -87,6 +87,10 @@ public class Robot extends TimedRobot {
     
     //timer
     final Timer m_timeSave = new Timer();
+
+    //config
+    SparkMaxConfig frontKickConfig = 
+      new SparkMaxConfig();
 
   // intake objects
     // motors
@@ -304,7 +308,6 @@ public class Robot extends TimedRobot {
       // stop intake
     }
 
-    
     if (m_controller.getRightBumperButtonPressed()) {
       System.out.println("run outtake");
       m_runIntakeMotor.configure(runIntakeOutConfig,
