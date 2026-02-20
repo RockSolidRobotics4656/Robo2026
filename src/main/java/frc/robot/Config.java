@@ -29,21 +29,23 @@ public class Config {
 
     public class Shoot{
         public static final int kRunMotorCANID = 8;
-        public static final double kRunMotorSpeed = .4;
+        public static final double kRunMotorSpeed = 1;
         public static final int kBackKickMotorCANID = 7;
-         public static final int kFrontKickMotorCANID = 9;
-        public static final double kKickMotorSpeed = 1;
-        public static double m_savedTime = 0.0; 
-
+        public static final double kKickMotorSpeed = .7;
+        public double m_savedTime = 0.0; 
+        public static final double kStoppedMotor = 0;
     }
 
     public class Intake{
-        public static final int kUpLimitSwitchDIOPort = 9;
-        public static final int kDownLimitSwitchDIOPort = 8;
+        public static final int kUpLimitSwitchDIOPort = 8;
+        public static final int kDownLimitSwitchDIOPort = 9;
         public static final int kRunMotorCANID = 6;
         public static final int kDeployMotorCANID = 5;
-        public static final double kDeployMotorSpeed = .2;
-        public static final double kRunMotorSpeed = 1;
+        public static final double kDeployMotorMaxSpeed = .5;
+        public static final double kDeployMotorMinSpeed = 0.01;
+        public static final double kRunMotorSpeed = .5;
+        public static final double kTravelTime = .5;
+        public static final double kIntakeSpeedMultiplier = 0.1;
     }
 
     public class Auto {
