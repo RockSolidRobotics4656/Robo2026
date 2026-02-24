@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
     new XboxController(0);
   private final Timer m_timer = 
    new Timer();
-   Thread m_visionThread;
+   Thread m_visionThread; 
 
   // drivetrain objects
     // motors
@@ -129,7 +129,7 @@ public class Robot extends TimedRobot {
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
     // setinverted is deprecated, this is the new invert method.
-    rightConfig.inverted(true);
+    rightConfig.inverted(false);
     m_rightLeadSparkMax.configure(rightConfig, 
       ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -142,7 +142,7 @@ public class Robot extends TimedRobot {
 
     SparkMaxConfig rightFollowConfig = new SparkMaxConfig();
     rightFollowConfig.inverted(true);
-    //rightFollowConfig.follow(Drivetrain.kDriveRightLeadCANID);
+    rightFollowConfig.follow(Drivetrain.kDriveRightLeadCANID);
     m_rightFollowSparkMax.configure(rightFollowConfig, 
       ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -176,7 +176,7 @@ public class Robot extends TimedRobot {
     // kill auto
     m_deployIntakeMotor.set(0);
     // m_climbMotor.set(0);
-    m_kickMotor.set(0);
+    m_backKickMotor.set(0);
     m_runIntakeMotor.set(0);
     m_shootMotor.set(0);
     m_robotDrive.arcadeDrive(0, 0);
@@ -337,7 +337,7 @@ public class Robot extends TimedRobot {
     } 
     else {
       m_shootMotor.set(Shoot.kStoppedMotor);
-      m_kickMotor.set(Shoot.kStoppedMotor);
+      m_backKickMotor.set(Shoot.kStoppedMotor);
     } 
 
     /*if (m_controller.getXButtonPressed()) {
