@@ -38,14 +38,14 @@ public class Robot extends TimedRobot {
 
   // drivetrain objects
     // motors
-    private final SparkMax m_leftLeadSparkMax = 
-      new SparkMax(Drivetrain.kDriveLeftLeadCANID, MotorType.kBrushless);
     private final SparkMax m_rightLeadSparkMax = 
       new SparkMax(Drivetrain.kDriveRightLeadCANID, MotorType.kBrushless);
-    private final SparkMax m_leftFollowSparkMax = 
-      new SparkMax(Drivetrain.kDriveLeftFollowCANID, MotorType.kBrushless);
+    private final SparkMax m_leftLeadSparkMax = 
+      new SparkMax(Drivetrain.kDriveLeftLeadCANID, MotorType.kBrushless);
     private final SparkMax m_rightFollowSparkMax = 
       new SparkMax(Drivetrain.kDriveRightFollowCANID, MotorType.kBrushless);
+    private final SparkMax m_leftFollowSparkMax = 
+      new SparkMax(Drivetrain.kDriveLeftFollowCANID, MotorType.kBrushless);
 
     // motor config declaration (not configured here) 
     private final SparkMaxConfig rightConfig = 
@@ -53,9 +53,9 @@ public class Robot extends TimedRobot {
     
     // motor group (followers grouped later)
     private final DifferentialDrive m_robotDrive = 
-      new DifferentialDrive(m_leftLeadSparkMax::set, m_rightLeadSparkMax::set);
+      new DifferentialDrive(m_rightLeadSparkMax::set, m_leftLeadSparkMax::set);
     private final DifferentialDrive m_robotDrive2 = 
-      new DifferentialDrive(m_leftFollowSparkMax::set, m_rightFollowSparkMax::set);
+      new DifferentialDrive(m_rightFollowSparkMax::set, m_leftFollowSparkMax::set);
 
   // climb objects
     // limit switches 
@@ -129,22 +129,25 @@ public class Robot extends TimedRobot {
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
     // setinverted is deprecated, this is the new invert method.
-    rightConfig.inverted(false);
-    m_rightLeadSparkMax.configure(rightConfig, 
+    rightConfig.inverted(true);
+    m_leftFollowSparkMax.configure(rightConfig, 
+      ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    
+    m_leftLeadSparkMax.configure(rightConfig, 
       ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     // set up for followers in drivetrain
-    SparkMaxConfig leftFollowConfig = new SparkMaxConfig();
+    //SparkMaxConfig leftFollowConfig = new SparkMaxConfig();
     //leftFollowConfig.follow(Drivetrain.kDriveLeftLeadCANID);
     //leftFollowConfig.inverted(true);
-    m_leftFollowSparkMax.configure(leftFollowConfig, 
-      ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    //m_rightFollowSparkMax.configure(leftFollowConfig, 
+      //ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    SparkMaxConfig rightFollowConfig = new SparkMaxConfig();
-    rightFollowConfig.inverted(true);
-    rightFollowConfig.follow(Drivetrain.kDriveRightLeadCANID);
-    m_rightFollowSparkMax.configure(rightFollowConfig, 
-      ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    //SparkMaxConfig rightFollowConfig = new SparkMaxConfig();
+    //rightFollowConfig.inverted(false);
+    //rightFollowConfig.follow(Drivetrain.kDriveRightLeadCANID);
+    //m_leftFollowSparkMax.configure(rightFollowConfig, 
+    //  ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     //climb config
     //climbUpConfig.inverted(false);
@@ -172,7 +175,7 @@ public class Robot extends TimedRobot {
     // this runs once at the start of teleop
     
     //System.out.println("right lead canid");
-    //System.out.println(m_rightLeadSparkMax.getDeviceId());
+    //System.out.println(m_leftLeadSparkMax.getDeviceId());
     // kill auto
     m_deployIntakeMotor.set(0);
     // m_climbMotor.set(0);
@@ -333,6 +336,7 @@ public class Robot extends TimedRobot {
     if (m_controller.getXButton()) {
       System.out.println("shoot");
       m_shootMotor.set(Shoot.kRunMotorSpeed);
+      m_backKickMotor.set(Shoot.kKickMotorSpeed);
       // m_shootMotor.set(1);
     } 
     else {
