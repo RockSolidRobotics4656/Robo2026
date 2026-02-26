@@ -29,7 +29,7 @@ public class Config {
 
     public class Shoot{
         public static final int kRunMotorCANID = 8;
-        public static final double kRunMotorSpeed = .7;
+        public static final double kRunMotorSpeed = .63;
         public static final int kBackKickMotorCANID = 7;
         public static final double kKickMotorSpeed = 1;
         public double m_savedTime = 0.0; 

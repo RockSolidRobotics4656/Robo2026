@@ -245,6 +245,7 @@ public class Robot extends TimedRobot {
 
     if (m_intakeIsMoving & m_intakeDownLimitSwitch.get()) {
       m_deployIntakeMotor.set(0);
+      m_intakeIsMoving = false;
     }
 
     // if (m_intakeIsMoving & (m_controller.getAButtonReleased() | 
@@ -277,7 +278,7 @@ public class Robot extends TimedRobot {
       double intakeMotorSpeed = Intake.kDeployMotorMaxSpeed - (Intake.kDeployMotorMinSpeed * count * Intake.kIntakeSpeedMultiplier);
       m_deployIntakeMotor.set(intakeMotorSpeed);
 
-      System.out.println("intakeaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeeeeee");
+      System.out.println("outakeaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeeeeee2");
       System.out.println(Timer.getMatchTime());
       System.out.println(m_intakeStartTime);
       System.out.println(count);
@@ -295,6 +296,7 @@ public class Robot extends TimedRobot {
     
     if (m_intakeIsMoving & m_intakeUpLimitSwitch.get()) {
       m_deployIntakeMotor.set(0);
+      m_intakeIsMoving = false;
     }
 
     if (m_controller.getLeftBumperButtonPressed()) {
@@ -334,15 +336,41 @@ public class Robot extends TimedRobot {
     }*/
 
     if (m_controller.getXButton()) {
+      m_shootMotor.set(Shoot.kRunMotorSpeed);
+      m_backKickMotor.set(Shoot.kKickMotorSpeed);
+      shootIsMoving = true;
+      System.out.println("shoot moving");
+    } 
+    else if (m_controller.getXButtonReleased() & shootIsMoving) {
+        System.out.println("Shoot Stopper");
+        m_shootMotor.set(Shoot.kStoppedMotor);
+        m_backKickMotor.set(Shoot.kStoppedMotor);
+        shootIsMoving = false;
+    }
+
+    /*while (!m_controller.getXButton() & shootIsMoving) {
+      m_shootMotor.set(Shoot.kStoppedMotor);
+      m_backKickMotor.set(Shoot.kStoppedMotor);
+      shootIsMoving = false;
+    }*/
+
+    /*if (m_controller.getXButtonReleased() & shootIsMoving) {
+      m_shootMotor.set(Shoot.kStoppedMotor);
+      m_backKickMotor.set(Shoot.kStoppedMotor);
+      shootIsMoving = false;
+    }*/
+
+    /*if (m_controller.getXButtonPressed()) {
       System.out.println("shoot");
       m_shootMotor.set(Shoot.kRunMotorSpeed);
       m_backKickMotor.set(Shoot.kKickMotorSpeed);
       // m_shootMotor.set(1);
     } 
-    else {
+
+    if (m_controller.getXButtonReleased()) {
       m_shootMotor.set(Shoot.kStoppedMotor);
       m_backKickMotor.set(Shoot.kStoppedMotor);
-    } 
+    }*/
 
     /*if (m_controller.getXButtonPressed()) {
       m_shootTime = Timer.getMatchTime();
