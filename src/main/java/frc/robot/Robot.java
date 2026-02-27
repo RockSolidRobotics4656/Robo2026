@@ -176,7 +176,7 @@ public class Robot extends TimedRobot {
     // kill auto
     m_deployIntakeMotor.set(0);
     // m_climbMotor.set(0);
-    m_kickMotor.set(0);
+    m_backKickMotor.set(0);
     m_runIntakeMotor.set(0);
     m_shootMotor.set(0);
     m_robotDrive.arcadeDrive(0, 0);
@@ -327,7 +327,7 @@ public class Robot extends TimedRobot {
     }*/
     /* 
     if (m_controller.getXButton() & (Timer.getMatchTime() - m_shootTime) > .25) {
-      m_kickMotor.set(Shoot.kKickMotorSpeed);
+      m_backKickMotor.set(Shoot.kKickMotorSpeed);
     }*/
 
     if (m_controller.getXButton()) {
@@ -337,7 +337,7 @@ public class Robot extends TimedRobot {
     } 
     else {
       m_shootMotor.set(Shoot.kStoppedMotor);
-      m_kickMotor.set(Shoot.kStoppedMotor);
+      m_backKickMotor.set(Shoot.kStoppedMotor);
     } 
 
     /*if (m_controller.getXButtonPressed()) {
@@ -354,17 +354,17 @@ public class Robot extends TimedRobot {
     } 
 
     if (Timer.getMatchTime() - m_shootTime > .25 & m_controller.getXButton()) {
-        m_kickMotor.set(Shoot.kKickMotorSpeed);
+        m_backKickMotor.set(Shoot.kKickMotorSpeed);
         // System.out.println(m_shootTime);
         shootIsMoving = true;
-        System.out.println(m_kickMotor);
+        System.out.println(m_backKickMotor);
     }
 
 
     if (m_controller.getXButtonReleased() & shootIsMoving) {
       System.out.println("stop shoot");
       m_shootMotor.set(0);
-      m_kickMotor.set(0);
+      m_backKickMotor.set(0);
       shootIsMoving = false;
       // stop shoot
     }*/
@@ -428,16 +428,17 @@ public class Robot extends TimedRobot {
     } 
 
     if ((m_controller.getLeftTriggerAxis() > 0) & (m_timer.get() - m_shootTime > .25)) {
-      m_kickMotor.set(Shoot.kKickMotorSpeed);
+      m_backKickMotor.set(Shoot.kKickMotorSpeed);
       System.out.println(m_shootTime);
     }
 
     if (m_controller.getXButtonReleased()) {
       System.out.println("stop shoot");
       m_shootMotor.set(0);
-      m_kickMotor.set(0);
+      m_backKickMotor.set(0);
       // stop shoot
     }*/
+    
      /* --------------------------------- */
      
     /*if (m_timer.get() < 3.0 & Auto.kautoVariable >= 1 & Auto.kautoVariable <= 1) {
