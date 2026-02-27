@@ -41,11 +41,9 @@ public class Config {
         public static final int kDownLimitSwitchDIOPort = 9;
         public static final int kRunMotorCANID = 6;
         public static final int kDeployMotorCANID = 5;
-        public static final double kDeployMotorMaxSpeed = 0.25;
-        public static final double kDeployMotorMinSpeed = 0.01;
+        public static final double kDeployMotorUpSpeed = 0.6;
+        public static final double kDeployMotorDownSpeed = 0.25;
         public static final double kRunMotorSpeed = .5;
-        // public static final double kTravelTime = .5;
-        // public static final double kIntakeSpeedMultiplier = 0.1;
     }
 
     public class Auto {

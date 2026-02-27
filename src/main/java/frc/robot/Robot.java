@@ -191,22 +191,20 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     // runs every 20ms during teleop. 
-    // returns error but continues rnning if it can't finish the loop in time.
+    // returns error but continues running if it can't finish the loop in time.
 
     // teleoperated drive. involves buttons and joysticks.
 
     // drive command, using the left stick only.
     m_robotDrive.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX());
     m_robotDrive2.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX());
-    // double kSpeed = m_controller.getRightY();
-    // m_shootMotor.set(kSpeed);
-    // double m_shootTime = 0.0;
     /* ---------------------------------------------------------- */
     // button bindings
-    // A and B are to deploy/bring back in the intake
+    // A - inward and B - outward intake tilt
     // X is shoot
     // bumpers run intake in and out
     // Y is climb
+    // right stick button is climb down
     /* ---------------------------------------------------------- */
 
     // if (m_controller.getAButton()) {
@@ -217,14 +215,8 @@ public class Robot extends TimedRobot {
       m_intakeDownLimitSwitch.get()) {
         m_deployIntakeMotor.configure(downIntakeConfig, 
           ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        m_deployIntakeMotor.set(Intake.kDeployMotorMaxSpeed);
+        m_deployIntakeMotor.set(Intake.kDeployMotorDownSpeed);
         System.out.println("deploy intake");
-        //m_deployIntakeMotor.configure
-          //(downIntakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        //m_intakeIsMoving = true;
-        //m_intakeUp = true;
-        //m_intakeStartTime = Timer.getMatchTime();
-        //count = 0;
       // deploy intake
     } else if (m_controller.getAButtonReleased() | !m_intakeDownLimitSwitch.get()) {
       m_deployIntakeMotor.set(0);
@@ -250,40 +242,22 @@ public class Robot extends TimedRobot {
 
       count += 1;
     }*/
-
-    //if ((m_intakeIsMoving & m_intakeDownLimitSwitch.get())) {
-      //m_deployIntakeMotor.set(0);
-      //m_intakeIsMoving = false;
-    //}
-
-    // if (m_intakeIsMoving & (m_controller.getAButtonReleased() | 
-    //   m_intakeDownLimitSwitch.get())) {
-    //     m_deployIntakeMotor.set(.0);
-    //     m_intakeIsMoving = false;
-    //     System.out.println("deploy intake stop");
-    // }
      
     if (m_controller.getBButton() & 
       m_intakeUpLimitSwitch.get()) {
         m_intakeIsMoving = true;
         m_deployIntakeMotor.configure(upIntakeConfig, 
           ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        m_deployIntakeMotor.set(Intake.kDeployMotorMaxSpeed);
+        m_deployIntakeMotor.set(Intake.kDeployMotorUpSpeed);
         System.out.println("retract intake");
         // bring in intake
-    } else if (m_controller.getBButtonReleased() | (!m_intakeUpLimitSwitch.get() & m_intakeIsMoving)) {
-      m_intakeIsMoving = false;
-      m_deployIntakeMotor.set(0);
-      System.out.println("retract intake stop");
+    } 
+    else if (m_controller.getBButtonReleased() | 
+      (!m_intakeUpLimitSwitch.get() & m_intakeIsMoving)) {
+        m_intakeIsMoving = false;
+        m_deployIntakeMotor.set(0);
+        System.out.println("retract intake stop");
     }
-
-    /*if (m_intakeIsMoving & (m_controller.getBButtonReleased() | 
-    m_intakeUpLimitSwitch.get())) {
-      m_intakeIsMoving = false;
-      m_deployIntakeMotor.set(0);
-          System.out.println("retract intake stop");
-    }*/
-    
 
     /*if (m_intakeIsMoving & !m_intakeUpLimitSwitch.get()) {
       // double count = (m_intakeStartTime - Timer.getMatchTime());
@@ -339,13 +313,6 @@ public class Robot extends TimedRobot {
       // stop outtake
     }
 
-    /*if (m_controller.getXButtonPressed()) {
-      m_shootTime = Timer.getMatchTime();
-    }*/
-    /* 
-    if (m_controller.getXButton() & (Timer.getMatchTime() - m_shootTime) > .25) {
-      m_kickMotor.set(Shoot.kKickMotorSpeed);
-    }*/
 
     if (m_controller.getXButton()) {
       m_shootMotor.set(Shoot.kRunMotorSpeed);
@@ -360,58 +327,6 @@ public class Robot extends TimedRobot {
         shootIsMoving = false;
     }
 
-    /*while (!m_controller.getXButton() & shootIsMoving) {
-      m_shootMotor.set(Shoot.kStoppedMotor);
-      m_backKickMotor.set(Shoot.kStoppedMotor);
-      shootIsMoving = false;
-    }*/
-
-    /*if (m_controller.getXButtonReleased() & shootIsMoving) {
-      m_shootMotor.set(Shoot.kStoppedMotor);
-      m_backKickMotor.set(Shoot.kStoppedMotor);
-      shootIsMoving = false;
-    }*/
-
-    /*if (m_controller.getXButtonPressed()) {
-      System.out.println("shoot");
-      m_shootMotor.set(Shoot.kRunMotorSpeed);
-      m_backKickMotor.set(Shoot.kKickMotorSpeed);
-      // m_shootMotor.set(1);
-    } 
-
-    if (m_controller.getXButtonReleased()) {
-      m_shootMotor.set(Shoot.kStoppedMotor);
-      m_backKickMotor.set(Shoot.kStoppedMotor);
-    }*/
-
-    /*if (m_controller.getXButtonPressed()) {
-      m_shootTime = Timer.getMatchTime();
-      System.out.println(m_shootTime);
-    }*/
-
-    /*if (m_controller.getXButtonPressed() & !shootIsMoving) {
-      System.out.println("shoot");
-      m_shootMotor.set(Shoot.kRunMotorSpeed);
-      m_shootTime = Timer.getMatchTime();
-      shootIsMoving = true;
-      // shoot
-    } 
-
-    if (Timer.getMatchTime() - m_shootTime > .25 & m_controller.getXButton()) {
-        m_kickMotor.set(Shoot.kKickMotorSpeed);
-        // System.out.println(m_shootTime);
-        shootIsMoving = true;
-        System.out.println(m_kickMotor);
-    }
-
-
-    if (m_controller.getXButtonReleased() & shootIsMoving) {
-      System.out.println("stop shoot");
-      m_shootMotor.set(0);
-      m_kickMotor.set(0);
-      shootIsMoving = false;
-      // stop shoot
-    }*/
 /* 
     if (m_controller.getYButtonPressed() & !m_climbTopLimitSwitch.get()) {
       System.out.println("climb");
@@ -456,40 +371,13 @@ public class Robot extends TimedRobot {
   }
 
   @SuppressWarnings("unused")
-  @Override
+  @Override 
   public void autonomousPeriodic() {
     // most basic auto program
-     /* ----------------------------------- */
+     /* -------------------------------------------------------- */
      // AUTO #1
-     /* ----------------------------------- */
+     /* -------------------------------------------------------- */
      // move & shoot & move
-     // do not uncomment this first section  
-      /*if (m_controller.getXButtonPressed()) {
-        System.out.println("shoot");
-        m_shootMotor.set(Shoot.kRunMotorSpeed);
-        m_shootTime = m_timer.get();
-      // shoot
-    } 
-
-    if ((m_controller.getLeftTriggerAxis() > 0) & (m_timer.get() - m_shootTime > .25)) {
-      m_kickMotor.set(Shoot.kKickMotorSpeed);
-      System.out.println(m_shootTime);
-    }
-
-    if (m_controller.getXButtonReleased()) {
-      System.out.println("stop shoot");
-      m_shootMotor.set(0);
-      m_kickMotor.set(0);
-      // stop shoot
-    }*/
-     /* --------------------------------- */
-     
-    /*if (m_timer.get() < 3.0 & Auto.kautoVariable >= 1 & Auto.kautoVariable <= 1) {
-      // arcadeDrive(speed, rotation) - rotation = 0 for driving straight
-      m_robotDrive.arcadeDrive(0.1, 0, false);
-      m_shootMotor.set(.3);
-      System.out.println("auto drive forward");
-    } */
 
     if (m_timer.get() > 3.0 & m_timer.get() < 5.0 & 
       Auto.kautoVariable == 1) {
@@ -499,7 +387,7 @@ public class Robot extends TimedRobot {
 
     if (m_timer.get() > 5 & m_timer.get() < 8 & 
       Auto.kautoVariable == 1) {
-    m_robotDrive.arcadeDrive(0.1, 0, false);
+    m_robotDrive.arcadeDrive(-0.1, 0, false);
     }
 
     if (m_timer.get() > 8 & m_timer.get() < 20 & 
@@ -538,7 +426,7 @@ public class Robot extends TimedRobot {
  
     if (!m_intakeIsMoving & (m_timer.get() > 11 & m_timer.get() < 20 & 
       !m_intakeDownLimitSwitch.get()) & Auto.kautoVariable == 2) {
-        m_deployIntakeMotor.set(Intake.kDeployMotorMaxSpeed);
+        m_deployIntakeMotor.set(Intake.kDeployMotorUpSpeed);
 
     }
 
@@ -549,7 +437,7 @@ public class Robot extends TimedRobot {
 
     /* ----------------------------------------------------------------------------------------------- */
     // end of auto #2
-    /* ----------------------------------------------------------------------------------------------- */
+    /* ---------------------------------------------------------------------------------------------- */
     /* ---------------------------------------------------------------------------------------------- */
     // auto # 3
     // climb
