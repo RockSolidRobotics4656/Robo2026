@@ -313,7 +313,6 @@ public class Robot extends TimedRobot {
       // stop outtake
     }
 
-
     if (m_controller.getXButton()) {
       m_shootMotor.set(Shoot.kRunMotorSpeed);
       m_backKickMotor.set(Shoot.kKickMotorSpeed);
@@ -326,6 +325,7 @@ public class Robot extends TimedRobot {
         m_backKickMotor.set(Shoot.kStoppedMotor);
         shootIsMoving = false;
     }
+
 
 /* 
     if (m_controller.getYButtonPressed() & !m_climbTopLimitSwitch.get()) {
@@ -378,6 +378,7 @@ public class Robot extends TimedRobot {
      // AUTO #1
      /* -------------------------------------------------------- */
      // move & shoot & move
+
 
     if (m_timer.get() > 3.0 & m_timer.get() < 5.0 & 
       Auto.kautoVariable == 1) {
@@ -434,10 +435,7 @@ public class Robot extends TimedRobot {
       & Auto.kautoVariable == 2) {
         m_runIntakeMotor.set(Intake.kRunMotorSpeed);
     }
-
-    /* ----------------------------------------------------------------------------------------------- */
-    // end of auto #2
-    /* ---------------------------------------------------------------------------------------------- */
+    
     /* ---------------------------------------------------------------------------------------------- */
     // auto # 3
     // climb
@@ -457,6 +455,7 @@ public class Robot extends TimedRobot {
    // AUTO # 4
    // LEFT
    /* ---------------------------------------------------------------------------  */
+
    if (Timer.getMatchTime() > 0 & Auto.kautoVariable == 4) {
     m_shootMotor.set(Shoot.kRunMotorSpeed);
    }
@@ -466,14 +465,11 @@ public class Robot extends TimedRobot {
     m_robotDrive2.arcadeDrive(.6, 0);
    }
 
-   /*if () {
-
-   }*/
-
    /* ------------------------------------------------------- */
    // Auto #5
    // Move for 4 sec at 60% simple
    /* ------------------------------------------------------- */
+
    if (Timer.getMatchTime() > 0 & Timer.getMatchTime() < 4 & Auto.kautoVariable == 5) {
     m_robotDrive.arcadeDrive(0.6, 0);
     m_robotDrive2.arcadeDrive(0.6, 0);
@@ -492,6 +488,7 @@ public class Robot extends TimedRobot {
    if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 4 & Timer.getMatchTime() < 6) {
     m_shootMotor.set(Shoot.kRunMotorSpeed);
    }
+
   } 
 
 }
