@@ -30,10 +30,13 @@ public class Config {
     public class Shoot{
         public static final int kRunMotorCANID = 8;
         public static final double kRunMotorSpeed = .63;
+        public static final double kBackMotorSpeed = .7;
+        public static final double k2BackMotorSpeed = .8;
         public static final int kBackKickMotorCANID = 7;
         public static final double kKickMotorSpeed = 1;
         public double m_savedTime = 0.0; 
         public static final double kStoppedMotor = 0;
+        public static final double kKickDelay = 0.2;
     }
 
     public class Intake{
@@ -41,8 +44,8 @@ public class Config {
         public static final int kDownLimitSwitchDIOPort = 9;
         public static final int kRunMotorCANID = 6;
         public static final int kDeployMotorCANID = 5;
-        public static final double kDeployMotorUpSpeed = 0.6;
-        public static final double kDeployMotorDownSpeed = 0.25;
+        public static final double kDeployMotorUpSpeed = 0.25;
+        public static final double kDeployMotorDownSpeed = 0.6;
         public static final double kRunMotorSpeed = .5;
     }
 
