@@ -12,6 +12,9 @@ package frc.robot;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 public class Config {
+
+    // public static final double kStoppedMotor = 0;
+
     public class Drivetrain {
         public static final int kDriveLeftLeadCANID = 1;
         public static final int kDriveLeftFollowCANID = 4;
@@ -29,14 +32,15 @@ public class Config {
 
     public class Shoot{
         public static final int kRunMotorCANID = 8;
-        public static final double kRunMotorSpeed = .63;
+        public static final double kRunMotorSpeed = .60;
         public static final double kBackMotorSpeed = .7;
         public static final double k2BackMotorSpeed = .8;
         public static final int kBackKickMotorCANID = 7;
         public static final double kKickMotorSpeed = 1;
         public double m_savedTime = 0.0; 
         public static final double kStoppedMotor = 0;
-        public static final double kKickDelay = 0.2;
+        public static final double kKickDelay = 0.7;
+        public static final double kInitSpeed = 1;
     }
 
     public class Intake{
@@ -45,12 +49,12 @@ public class Config {
         public static final int kRunMotorCANID = 6;
         public static final int kDeployMotorCANID = 5;
         public static final double kDeployMotorUpSpeed = 0.25;
-        public static final double kDeployMotorDownSpeed = 0.6;
+        public static final double kDeployMotorDownSpeed = 0.55;
         public static final double kRunMotorSpeed = .5;
     }
 
     public class Auto {
-        public static final int kautoVariable = 3;
+        public static final int kautoVariable = 5;
     }
     
 }
