@@ -21,6 +21,7 @@ public class Config {
         public static final int kDriveRightLeadCANID = 2;
         public static final int kDriveRightFollowCANID = 3;
         public static final MotorType kDriveMotorType = MotorType.kBrushless;
+        public static final double kSpeedFactor = .75; // .7 for Tryg, 1 for everyone else
     }
 
     public class Climb{ 

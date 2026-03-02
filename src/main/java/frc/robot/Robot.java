@@ -218,8 +218,8 @@ public class Robot extends TimedRobot {
       // teleoperated drive. involves buttons and joysticks.
 
       // drive command, using the left stick only.
-      m_robotDrive.arcadeDrive(m_controller.getLeftY(), -m_controller.getLeftX());
-      m_robotDrive2.arcadeDrive(m_controller.getLeftY(), -m_controller.getLeftX());
+      m_robotDrive.arcadeDrive(m_controller.getLeftY() * Drivetrain.kSpeedFactor, -m_controller.getLeftX() * Drivetrain.kSpeedFactor);
+      m_robotDrive2.arcadeDrive(m_controller.getLeftY() * Drivetrain.kSpeedFactor, -m_controller.getLeftX() * Drivetrain.kSpeedFactor);
       /* ---------------------------------------------------------- */
       // button bindings
       // A - inward and B - outward intake tilt
@@ -537,12 +537,15 @@ public class Robot extends TimedRobot {
    // Move for 4 sec at 60% simple
    /* ------------------------------------------------------- */
 
-   if (Timer.getMatchTime() > 0 & Timer.getMatchTime() < 4 & Auto.kautoVariable == 5) {
+   if (Timer.getMatchTime() > 16 & Timer.getMatchTime() < 20 & Auto.kautoVariable == 5) {
     m_robotDrive.arcadeDrive(0.4, 0);
     m_robotDrive2.arcadeDrive(0.4, 0);
    } 
 
-   if (Timer.getMatchTime() > 4 & Timer.getMatchTime() < 6 & Auto.kautoVariable == 5) {}
+   if (Timer.getMatchTime() > 0 & Timer.getMatchTime() < 16 & Auto.kautoVariable == 5) {
+    m_robotDrive.arcadeDrive(0, 0.01);
+    m_robotDrive.arcadeDrive(0, 0.01);
+   }
 
    /* ------------------------------------------------------------------------------------ */
    // Auto #6
@@ -555,6 +558,8 @@ public class Robot extends TimedRobot {
    }
 
    if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 4 & Timer.getMatchTime() < 6) {
+    m_robotDrive.arcadeDrive(0, 0);
+    m_robotDrive2.arcadeDrive(0, 0);
     m_shootMotor.set(Shoot.kRunMotorSpeed);
    }
 
