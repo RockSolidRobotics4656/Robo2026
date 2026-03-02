@@ -9,6 +9,8 @@ import frc.robot.Config.*;
 // WPI imports
 // import edu.wpi.first.hal.DIOJNI;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -18,6 +20,9 @@ import edu.wpi.first.cameraserver.CameraServer;
 // REVLIB specific imports. If errored, download REVLIB.
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
+import java.util.Optional;
+import java.util.OptionalInt;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
@@ -349,6 +354,10 @@ public class Robot extends TimedRobot {
         m_shootMotor.set(Shoot.kInitSpeed);
       }
 
+      if (m_controller.getXButton() & (Timer.getTimestamp() -shootStartTime) > (Shoot.kKickDelay - 0.1)) {
+        m_backKickMotor.set(0);
+      }
+
       if (m_controller.getXButton() & (Timer.getTimestamp() -shootStartTime) > Shoot.kKickDelay) {
         System.out.println("start kick");
         m_shootMotor.set(Shoot.kRunMotorSpeed);
@@ -415,6 +424,13 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_timer.restart();
     // CommandScheduler.getInstance();
+    OptionalInt station = DriverStation.getLocation();
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    System.out.println("Driver Station Location");
+    System.out.println(station);
+    
+    System.out.println("Driver Station Alliance");
+    System.out.println(ally);
   }
 
   @SuppressWarnings("unused")
@@ -534,33 +550,44 @@ public class Robot extends TimedRobot {
 
    /* ------------------------------------------------------- */
    // Auto #5
-   // Move for 4 sec at 60% simple
+   // Move for 4 sec at 40% simple
    /* ------------------------------------------------------- */
 
-   if (Timer.getMatchTime() > 16 & Timer.getMatchTime() < 20 & Auto.kautoVariable == 5) {
+   if (Timer.getMatchTime() > 18 & Timer.getMatchTime() < 20 & Auto.kautoVariable == 5) {
     m_robotDrive.arcadeDrive(0.4, 0);
     m_robotDrive2.arcadeDrive(0.4, 0);
    } 
 
-   if (Timer.getMatchTime() > 0 & Timer.getMatchTime() < 16 & Auto.kautoVariable == 5) {
+   if (Timer.getMatchTime() > 0 & Timer.getMatchTime() < 18 & Auto.kautoVariable == 5) {
     m_robotDrive.arcadeDrive(0, 0.01);
     m_robotDrive.arcadeDrive(0, 0.01);
    }
 
    /* ------------------------------------------------------------------------------------ */
    // Auto #6
-   // Right position
-   //
+   // middle
+   // drive & shoot
    /* ------------------------------------------------------------------------------------ */
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 4) {
-    m_robotDrive2.arcadeDrive(.7,1);
-    m_robotDrive.arcadeDrive(.7, 0);
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 16) {
+    m_shootMotor.set(Shoot.kRunMotorSpeed);
+    // shoot motor
    }
 
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 4 & Timer.getMatchTime() < 6) {
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 19.3 & Timer.getMatchTime() > 16) {
+    // kick motor
+    m_backKickMotor.set(Shoot.kKickMotorSpeed);
+   }
+
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 15 & Timer.getMatchTime() < 16) {
+    m_robotDrive2.arcadeDrive(-.5,0);
+    m_robotDrive.arcadeDrive(-.5, 0);
+    m_shootMotor.set(0);
+    m_backKickMotor.set(0);
+   }
+
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 15) {
     m_robotDrive.arcadeDrive(0, 0);
     m_robotDrive2.arcadeDrive(0, 0);
-    m_shootMotor.set(Shoot.kRunMotorSpeed);
    }
 
   } 
