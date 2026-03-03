@@ -21,7 +21,7 @@ public class Config {
         public static final int kDriveRightLeadCANID = 2;
         public static final int kDriveRightFollowCANID = 3;
         public static final MotorType kDriveMotorType = MotorType.kBrushless;
-        public static final double kSpeedFactor = .75; // .7 for Tryg, 1 for everyone else
+        public static final double kSpeedFactor = 1; // .7 for Tryg, 1 for everyone else
     }
 
     public class Climb{ 
@@ -52,10 +52,11 @@ public class Config {
         public static final double kDeployMotorUpSpeed = 0.25;
         public static final double kDeployMotorDownSpeed = 0.55;
         public static final double kRunMotorSpeed = .5;
+        public static final double kDeployIntakeHomeSpeed = 0.2;
     }
 
     public class Auto {
-        public static final int kautoVariable = 5;
+        public static final int kautoVariable = 6;
     }
     
 }

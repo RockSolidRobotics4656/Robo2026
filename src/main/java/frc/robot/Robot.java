@@ -242,7 +242,7 @@ public class Robot extends TimedRobot {
         m_intakeDownLimitSwitch.get() & (m_controller.getLeftTriggerAxis() < .5)) {
           m_deployIntakeMotor.configure(downIntakeConfig, 
             ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-          m_deployIntakeMotor.set(Intake.kDeployMotorDownSpeed);
+          m_deployIntakeMotor.set(Intake.kDeployIntakeHomeSpeed);
           System.out.println("deploy intake");
         // deploy intake
       } else if (/*m_controller.getAButtonReleased() |*/ !m_intakeDownLimitSwitch.get()) {
@@ -579,8 +579,8 @@ public class Robot extends TimedRobot {
    }
 
    if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 15 & Timer.getMatchTime() < 16) {
-    m_robotDrive2.arcadeDrive(-.5,0);
-    m_robotDrive.arcadeDrive(-.5, 0);
+    m_robotDrive2.arcadeDrive(.5,0);
+    m_robotDrive.arcadeDrive(.5, 0);
     m_shootMotor.set(0);
     m_backKickMotor.set(0);
    }
