@@ -569,23 +569,24 @@ public class Robot extends TimedRobot {
    // drive & shoot
    /* ------------------------------------------------------------------------------------ */
    if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 16) {
-    m_shootMotor.set(Shoot.kRunMotorSpeed);
+    m_shootMotor.set(1);
     // shoot motor
    }
 
    if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 19.3 & Timer.getMatchTime() > 16) {
     // kick motor
     m_backKickMotor.set(Shoot.kKickMotorSpeed);
+    m_shootMotor.set(Shoot.kRunMotorSpeed);
    }
 
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 15 & Timer.getMatchTime() < 16) {
-    m_robotDrive2.arcadeDrive(-.5,0);
-    m_robotDrive.arcadeDrive(-.5, 0);
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 14.5 & Timer.getMatchTime() < 16) {
+    m_robotDrive2.arcadeDrive(-0.5,0);
+    m_robotDrive.arcadeDrive(-0.5, 0);
     m_shootMotor.set(0);
     m_backKickMotor.set(0);
    }
 
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 15) {
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 14.5) {
     m_robotDrive.arcadeDrive(0, 0);
     m_robotDrive2.arcadeDrive(0, 0);
    }

@@ -55,7 +55,7 @@ public class Config {
     }
 
     public class Auto {
-        public static final int kautoVariable = 5;
+        public static final int kautoVariable = 6;
     }
     
 }
