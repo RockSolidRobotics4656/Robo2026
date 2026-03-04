@@ -190,22 +190,24 @@ public class Robot extends TimedRobot {
       /* ---------------------------------------------------------- */
 
       if (!m_controller.getBButton() &
-        m_intakeDownLimitSwitch.get() & (m_controller.getLeftTriggerAxis() < .5) /*& deployIntakeTime > 0.2*/) {
+        m_intakeDownLimitSwitch.get() & (m_controller.getLeftTriggerAxis() < .5) & (Timer.getTimestamp() - deployIntakeTime) > 0.2) {
           m_deployIntakeMotor.configure(downIntakeConfig, 
             ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
           m_deployIntakeMotor.set(Intake.kDeployIntakeHomeSpeed);
           System.out.println("deploy intake");
         // deploy intake
-      } else if (/*m_controller.getAButtonReleased() |*/ !m_intakeDownLimitSwitch.get()) {
+      } 
+      else if (!m_intakeDownLimitSwitch.get()) {
         m_deployIntakeMotor.set(0);
-      } /*else if ((Timer.getTimestamp() - deployIntakeTime) < 0.2) {
+      } 
+      else if ((Timer.getTimestamp() - deployIntakeTime) < 0.2) {
         m_deployIntakeMotor.set(Intake.kDeployMotorUpSpeed);
-      }*/
+      }
 
-      /*if (!m_controller.getBButton() & 
-        (m_controller.getLeftTriggerAxis() < .5) & deployIntakeTime > 0.2) {
+      if (!m_controller.getBButton() & 
+        (m_controller.getLeftTriggerAxis() < .5) & (Timer.getTimestamp() - deployIntakeTime) > 0.2) {
           deployIntakeTime = Timer.getTimestamp();
-      }*/
+      }
 
       /*if (m_intakeIsMoving & !m_intakeDownLimitSwitch.get()) {
         // double count = (m_intakeStartTime - Timer.getMatchTime());
@@ -244,32 +246,6 @@ public class Robot extends TimedRobot {
           System.out.println("retract intake stop");
       }
 
-      /*if (m_intakeIsMoving & !m_intakeUpLimitSwitch.get()) {
-        // double count = (m_intakeStartTime - Timer.getMatchTime());
-        double intakeMotorSpeed = Intake.kDeployMotorMaxSpeed - (Intake.kDeployMotorMinSpeed * count * Intake.kIntakeSpeedMultiplier);
-        m_deployIntakeMotor.set(intakeMotorSpeed);
-
-        System.out.println("outakeaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeeeeee2");
-        System.out.println(Timer.getMatchTime());
-        System.out.println(m_intakeStartTime);
-        System.out.println(count);
-        System.out.println(intakeMotorSpeed);
-        System.out.println(m_deployIntakeMotor.get());
-
-        if (intakeMotorSpeed <= Intake.kDeployMotorMinSpeed) {
-          m_deployIntakeMotor.set(0);
-          m_intakeIsMoving = false;
-          System.out.println("deploy intake stop");
-        }
-
-        count += 1;
-      }*/
-      
-      // if (m_intakeIsMoving & m_intakeUpLimitSwitch.get()) {
-      //   m_deployIntakeMotor.set(0);
-      //   m_intakeIsMoving = false;
-      // }
-
       /* run intake to deploy 
       * hold b to run intake
       */
@@ -302,7 +278,6 @@ public class Robot extends TimedRobot {
         // stop outtake
       }
 
-      // if (Timer.getMatchTime()
       if (m_controller.getXButtonPressed() & !shootIsMoving) {
         System.out.println("Shoot init");
         shootIsMoving = true;
@@ -323,54 +298,12 @@ public class Robot extends TimedRobot {
         m_backKickMotor.set(Shoot.kKickMotorSpeed);
       }
 
-      // if (m_controller.getXButton()) {
-      //   // m_shootMotor.set(Shoot.kRunMotorSpeed);
-      //   // m_backKickMotor.set(Shoot.kKickMotorSpeed);
-      //   /*if (Timer.getMatchTime() - shootStartTime > Shoot.kKickDelay) {
-      //     m_backKickMotor.set(Shoot.kKickMotorSpeed);
-      //   }*/
-      //   shootIsMoving = true;
-      //   System.out.println("shoot moving");
-      // } 
-      // else 
       if (m_controller.getXButtonReleased() & shootIsMoving) {
           System.out.println("Shoot Stopper");
           m_shootMotor.set(Shoot.kStoppedMotor);
           m_backKickMotor.set(Shoot.kStoppedMotor);
           shootIsMoving = false;
       }
-
-
-  /* 
-      if (m_controller.getYButtonPressed() & !m_climbTopLimitSwitch.get()) {
-        System.out.println("climb");
-        m_climbMotor.configure(climbUpConfig,
-          ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-            m_climbMotor.set(Climb.kMotorSpeed);
-        // climb
-      }
-
-      if (m_controller.getYButtonReleased() | m_climbTopLimitSwitch.get()) {
-        m_climbMotor.set(0);
-        // stop climb
-      }
-
-      if ((m_controller.getRightStickButtonPressed() & !m_climbBottomLimitSwitch.get())) {
-        System.out.println("un-climb");
-        m_climbIsMoving = true;
-        m_climbMotor.configure
-          (climbDownConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        m_climbMotor.set(Climb.kMotorSpeed);
-        // climb
-      }
-
-      if (m_climbIsMoving & (m_controller.getRightStickButtonReleased() 
-        | m_climbBottomLimitSwitch.get())) {
-          m_climbMotor.set(0);
-          m_climbIsMoving = false;
-          System.out.println("un-climb stop");
-          // stop climb
-      }*/
 
     }
 
