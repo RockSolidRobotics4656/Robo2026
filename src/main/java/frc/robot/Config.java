@@ -22,7 +22,7 @@ public class Config {
         public static final int kDriveRightFollowCANID = 3;
         public static final MotorType kDriveMotorType = MotorType.kBrushless;
         public static final double kSpeedFactor = 1; // .7 for Tryg, 1 for everyone else
-        public static final double kTurnFactor = .9;
+        public static final double kTurnFactor = .85;
     }
 
     public class Climb{ 
