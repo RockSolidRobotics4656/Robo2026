@@ -53,7 +53,7 @@ public class Config {
         public static final double kDeployMotorUpSpeed = 0.25;
         public static final double kDeployMotorDownSpeed = 0.55;
         public static final double kRunMotorSpeed = 0.5;
-        public static final double kDeployIntakeHomeSpeed = 0.55;
+        public static final double kDeployIntakeHomeSpeed = 0.6;
     }
 
     public class Auto {
