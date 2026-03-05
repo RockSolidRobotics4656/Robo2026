@@ -415,18 +415,26 @@ public class Robot extends TimedRobot {
    // middle
    // drive & shoot
    /* ------------------------------------------------------------------------------------ */
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 16) {
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 19.3) {
     m_shootMotor.set(1);
     // shoot motor
    }
+   
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 18.5) {
+    m_backKickMotor.set(-Shoot.kKickMotorSpeed);
+   }
 
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 19.3 & Timer.getMatchTime() > 16) {
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() == 18.5) {
+    m_backKickMotor.set(0);
+   }
+
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 18.5 & Timer.getMatchTime() > 16) {
     // kick motor
     m_backKickMotor.set(Shoot.kKickMotorSpeed);
     m_shootMotor.set(Shoot.kRunMotorSpeed);
    }
 
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 14.5 & Timer.getMatchTime() < 16) {
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 15.7 & Timer.getMatchTime() < 16) {
     m_robotDrive2.arcadeDrive(0.5,0);
     m_robotDrive.arcadeDrive(0.5, 0);
     m_shootMotor.set(0);
@@ -438,7 +446,7 @@ public class Robot extends TimedRobot {
       m_deployIntakeMotor.set(Intake.kDeployMotorUpSpeed);
    }
 
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 15.5 & 
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 15.7 & 
     Timer.getMatchTime() > 15 & m_intakeUpLimitSwitch.get()) {
       m_deployIntakeMotor.set(Intake.kDeployMotorDownSpeed);
     }

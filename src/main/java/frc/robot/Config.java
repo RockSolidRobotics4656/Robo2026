@@ -43,6 +43,7 @@ public class Config {
         public static final double kStoppedMotor = 0;
         public static final double kKickDelay = 0.7;
         public static final double kInitSpeed = 1;
+        public static final double kAutoShoot = 0.7;
     }
 
     public class Intake{
