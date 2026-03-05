@@ -38,11 +38,13 @@ public class Config {
         public static final double kBackMotorSpeed = .7;
         public static final double k2BackMotorSpeed = .8;
         public static final int kBackKickMotorCANID = 7;
+        public static final int kFrontKickCANID = 9;
         public static final double kKickMotorSpeed = 1;
         public double m_savedTime = 0.0; 
         public static final double kStoppedMotor = 0;
         public static final double kKickDelay = 0.7;
         public static final double kInitSpeed = 1;
+        public static final double kFrontKickMotorSpeed = 0.7;
     }
 
     public class Intake{

@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.cameraserver.CameraServer;
+// import edu.wpi.first.cameraserver.CameraServer;
 
 // REVLIB specific imports. If errored, download REVLIB.
 import com.revrobotics.spark.SparkMax;
@@ -68,6 +68,7 @@ public class Robot extends TimedRobot {
       (Shoot.kRunMotorCANID, MotorType.kBrushless);
     SparkMax m_backKickMotor = new SparkMax
       (Shoot.kBackKickMotorCANID, MotorType.kBrushed);
+    SparkMax m_frontKickMotor = new SparkMax(Shoot.kFrontKickCANID, MotorType.kBrushless);
     
     // variable
     Boolean shootIsMoving = false;
@@ -285,17 +286,20 @@ public class Robot extends TimedRobot {
         System.out.println(shootStartTime);
         m_backKickMotor.set(-1 * Shoot.kKickMotorSpeed);
         m_shootMotor.set(Shoot.kInitSpeed);
+        m_frontKickMotor.set(-1 * Shoot.kFrontKickMotorSpeed);
       }
 
       if (m_controller.getXButton() & (Timer.getTimestamp() -shootStartTime) > (Shoot.kKickDelay - 0.1) &
         (Timer.getTimestamp() -shootStartTime) < Shoot.kKickDelay) {
           m_backKickMotor.set(0);
+          m_frontKickMotor.set(0);
       }
 
       if (m_controller.getXButton() & (Timer.getTimestamp() -shootStartTime) > Shoot.kKickDelay) {
         System.out.println("start kick");
         m_shootMotor.set(Shoot.kRunMotorSpeed);
         m_backKickMotor.set(Shoot.kKickMotorSpeed);
+        m_frontKickMotor.set(Shoot.kFrontKickMotorSpeed);
       }
 
       if (m_controller.getXButtonReleased() & shootIsMoving) {
