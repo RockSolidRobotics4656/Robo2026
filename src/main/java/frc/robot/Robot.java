@@ -352,28 +352,6 @@ public class Robot extends TimedRobot {
     //   //   m_robotDrive.arcadeDrive(0, 0);
     //   //   m_robotDrive2.arcadeDrive(0, 0);}
     // }
-
-     /* -------------------------------------------------------- */
-     // AUTO #1
-     /* -------------------------------------------------------- */
-     // move & shoot & move
-
-
-    if (m_timer.get() > 3.0 & m_timer.get() < 5.0 & 
-      Auto.kautoVariable == 1) {
-        m_shootMotor.set(Shoot.kRunMotorSpeed);
-        System.out.println("auto shoot");
-    }
-
-    if (m_timer.get() > 5 & m_timer.get() < 8 & 
-      Auto.kautoVariable == 1) {
-    m_robotDrive.arcadeDrive(-0.1, 0, false);
-    }
-
-    if (m_timer.get() > 8 & m_timer.get() < 20 & 
-      Auto.kautoVariable == 1){
-        m_robotDrive.arcadeDrive(0, 0.6);
-    }
       
     /*--------------------------------------------------------- */
     //auto #2
@@ -415,47 +393,35 @@ public class Robot extends TimedRobot {
         m_runIntakeMotor.set(Intake.kRunMotorSpeed);
     }
     
-    /* ---------------------------------------------------------------------------------------------- */
-    // auto # 3
-    // climb
-    /* ------------------------------------------------------------------------------------------ */
-
-    if (m_timer.get() < 2.0 & Auto.kautoVariable == 3) {
-      m_robotDrive.arcadeDrive(0, .5);
-      m_robotDrive2.arcadeDrive(0,.5);
-    }
-
-    /*if (m_timer.get() >  2.0  & !m_climbIsMoving & !m_climbTopLimitSwitch.get() 
-      & Auto.kautoVariable >= 3 & Auto.kautoVariable <= 3) {
-        m_robotDrive.arcadeDrive(.8, 0);
-        m_climbMotor.set(.6);
-        m_climbIsMoving = true;
-    }   */
    /* ---------------------------------------------------------------------------  */
    // AUTO # 4
    // LEFT
    /* ---------------------------------------------------------------------------  */
 
    if (Timer.getMatchTime() > 0 & Auto.kautoVariable == 4) {
+    // shoot
     m_shootMotor.set(Shoot.kRunMotorSpeed);
    }
 
    if (Timer.getMatchTime() < 4 & Timer.getMatchTime() > 6) {
+    // drive back
     m_robotDrive.arcadeDrive(.6, 0);
     m_robotDrive2.arcadeDrive(.6, 0);
    }
 
    /* ------------------------------------------------------- */
    // Auto #5
-   // Move for 4 sec at 40% simple
+   // Move for 2 sec at 40% simple
    /* ------------------------------------------------------- */
 
    if (Timer.getMatchTime() > 18 & Timer.getMatchTime() < 20 & Auto.kautoVariable == 5) {
+    // drive back
     m_robotDrive.arcadeDrive(0.4, 0);
     m_robotDrive2.arcadeDrive(0.4, 0);
    } 
 
    if (Timer.getMatchTime() > 0 & Timer.getMatchTime() < 18 & Auto.kautoVariable == 5) {
+    // stop drive
     m_robotDrive.arcadeDrive(0, 0.01);
     m_robotDrive.arcadeDrive(0, 0.01);
    }
@@ -472,18 +438,22 @@ public class Robot extends TimedRobot {
 
    if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 19.3 & Timer.getMatchTime() > 16) {
     // kick motor
+    m_frontKickMotor.set(Shoot.kFrontKickMotorSpeed);
     m_backKickMotor.set(Shoot.kKickMotorSpeed);
     m_shootMotor.set(Shoot.kRunMotorSpeed);
    }
 
    if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 14.5 & Timer.getMatchTime() < 16) {
-    m_robotDrive2.arcadeDrive(0.5,0);
-    m_robotDrive.arcadeDrive(0.5, 0);
+    // drive back & stop shoot
+    // m_robotDrive2.arcadeDrive(0.5,0);
+    // m_robotDrive.arcadeDrive(0.5, 0);
     m_shootMotor.set(0);
     m_backKickMotor.set(0);
+    m_frontKickMotor.set(Shoot.kFrontKickMotorSpeed);
    }
 
    if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 14.5) {
+    // stop drive
     m_robotDrive.arcadeDrive(0, 0);
     m_robotDrive2.arcadeDrive(0, 0);
    }
