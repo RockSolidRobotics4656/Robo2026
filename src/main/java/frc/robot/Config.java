@@ -25,12 +25,12 @@ public class Config {
         public static final double kTurnFactor = .85;
     }
 
-    public class Climb{ 
-        public static final int kTopLimitSwitchDIOPort = 6;
-        public static final int kBottomLimitSwitchDIOPort = 8;
-        public static final int kMotorCANID = 10;
-        public static final double kMotorSpeed = .2;
-    }
+    // public class Climb{ 
+    //     public static final int kTopLimitSwitchDIOPort = 6;
+    //     public static final int kBottomLimitSwitchDIOPort = 8;
+    //     public static final int kMotorCANID = 10;
+    //     public static final double kMotorSpeed = .2;
+    // }
 
     public class Shoot{
         public static final int kRunMotorCANID = 8;
@@ -50,7 +50,7 @@ public class Config {
         public static final int kDownLimitSwitchDIOPort = 9;
         public static final int kRunMotorCANID = 6;
         public static final int kDeployMotorCANID = 5;
-        public static final double kDeployMotorUpSpeed = 0.3;
+        public static final double kDeployMotorUpSpeed = 0.35;
         public static final double kDeployMotorDownSpeed = 0.55;
         public static final double kRunMotorSpeed = 0.5;
         public static final double kDeployIntakeHomeSpeed = 0.6;
