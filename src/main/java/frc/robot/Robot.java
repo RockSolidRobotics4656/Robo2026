@@ -420,15 +420,15 @@ public class Robot extends TimedRobot {
     // shoot motor
    }
    
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 18.5) {
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 19) {
     m_backKickMotor.set(-Shoot.kKickMotorSpeed);
    }
 
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() == 18.5) {
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() == 19) {
     m_backKickMotor.set(0);
    }
 
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 18.5 & Timer.getMatchTime() > 16) {
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 19 & Timer.getMatchTime() > 16) {
     // kick motor
     m_backKickMotor.set(Shoot.kKickMotorSpeed);
     m_shootMotor.set(Shoot.kRunMotorSpeed);
