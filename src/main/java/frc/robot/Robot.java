@@ -115,6 +115,7 @@ public class Robot extends TimedRobot {
   /* ---------------------------------------------------------------------------------------- */
   /* ---------------------------------------------------------------------------------------- */
   public Robot() {
+    frontKickConfig.inverted(true);
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
@@ -125,6 +126,9 @@ public class Robot extends TimedRobot {
     
     m_leftLeadSparkMax.configure(rightConfig, 
       ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+
+    // m_frontKickMotor.configure(frontKickConfig, 
+    //   ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     //intake config
     downIntakeConfig.inverted(false);
@@ -284,9 +288,7 @@ public class Robot extends TimedRobot {
         shootIsMoving = true;
         shootStartTime = Timer.getTimestamp();
         System.out.println(shootStartTime);
-        m_backKickMotor.set(-1 * Shoot.kKickMotorSpeed);
-        m_shootMotor.set(Shoot.kInitSpeed);
-        m_frontKickMotor.set(-1 * Shoot.kFrontKickMotorSpeed);
+        m_shootMotor.set(Shoot.kRunMotorSpeed);
       }
 
       if (m_controller.getXButton() & (Timer.getTimestamp() -shootStartTime) > (Shoot.kKickDelay - 0.1) &
@@ -306,6 +308,7 @@ public class Robot extends TimedRobot {
           System.out.println("Shoot Stopper");
           m_shootMotor.set(Shoot.kStoppedMotor);
           m_backKickMotor.set(Shoot.kStoppedMotor);
+          m_frontKickMotor.set(Shoot.kStoppedMotor);
           shootIsMoving = false;
       }
 
@@ -431,17 +434,36 @@ public class Robot extends TimedRobot {
    // middle
    // drive & shoot
    /* ------------------------------------------------------------------------------------ */
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 16) {
-    m_shootMotor.set(1);
-    // shoot motor
-   }
-
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 19.3 & Timer.getMatchTime() > 16) {
-    // kick motor
-    m_frontKickMotor.set(Shoot.kFrontKickMotorSpeed);
-    m_backKickMotor.set(Shoot.kKickMotorSpeed);
     m_shootMotor.set(Shoot.kRunMotorSpeed);
-   }
+    // shoot motor
+  //  }
+
+  //  // if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 19.3 & Timer.getMatchTime() > 16) {
+  //   // kick motor
+  //   m_frontKickMotor.set(Shoot.kFrontKickMotorSpeed);
+  //   m_backKickMotor.set(Shoot.kKickMotorSpeed);
+  //   m_shootMotor.set(Shoot.kRunMotorSpeed);
+  //  }
+
+  //  // if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 19.3 & 
+  //   Timer.getMatchTime() > 16 & m_intakeDownLimitSwitch.get() & !m_intakeIsMoving) {
+  //     m_deployIntakeMotor.set(Intake.kDeployMotorUpSpeed);
+  //     m_intakeIsMoving = true;
+  //  } else if (Auto.kautoVariable == 6 & m_intakeIsMoving &
+  //   Timer.getMatchTime() < 19.3 & Timer.getMatchTime() > 16 & !m_intakeUpLimitSwitch.get()) {
+  //     m_deployIntakeMotor.set(0);
+  //     m_intakeIsMoving = false;
+  //   }
+
+  //  if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 19.3 & 
+  //   Timer.getMatchTime() > 16 & m_intakeUpLimitSwitch.get() & !m_intakeIsMoving) {
+  //     m_deployIntakeMotor.set(Intake.kDeployIntakeHomeSpeed);
+  //     m_intakeIsMoving = true;
+  //  } else if (Auto.kautoVariable == 6 & m_intakeIsMoving & 
+  //   Timer.getMatchTime() < 19.3 & Timer.getMatchTime() > 16 & !m_intakeDownLimitSwitch.get()) {
+  //     m_deployIntakeMotor.set(0);
+  //     m_intakeIsMoving = false;
+  //   }
 
    if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 14.5 & Timer.getMatchTime() < 16) {
     // drive back & stop shoot
@@ -449,7 +471,7 @@ public class Robot extends TimedRobot {
     // m_robotDrive.arcadeDrive(0.5, 0);
     m_shootMotor.set(0);
     m_backKickMotor.set(0);
-    m_frontKickMotor.set(Shoot.kFrontKickMotorSpeed);
+    m_frontKickMotor.set(0);
    }
 
    if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 14.5) {
