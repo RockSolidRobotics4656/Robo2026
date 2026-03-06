@@ -34,7 +34,7 @@ public class Config {
 
     public class Shoot{
         public static final int kRunMotorCANID = 8;
-        public static final double kRunMotorSpeed = .60;
+        public static final double kRunMotorSpeed = .55;
         public static final double kBackMotorSpeed = .7;
         public static final double k2BackMotorSpeed = .8;
         public static final int kBackKickMotorCANID = 7;
@@ -44,7 +44,8 @@ public class Config {
         public static final double kStoppedMotor = 0;
         public static final double kKickDelay = 0.7;
         public static final double kInitSpeed = 1;
-        public static final double kFrontKickMotorSpeed = 0.05;
+        public static final double kAutoShoot = 0.7;
+        public static final double kFrontKickMotorSpeed = 0.3;
     }
 
     public class Intake{
