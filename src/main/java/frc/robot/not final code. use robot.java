@@ -2,11 +2,12 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc;
+package frc.robot;
 // this links to the Config file, where constants are stored.
 import frc.robot.Config.*;
 
 // WPI imports
+// import edu.wpi.first.hal.DIOJNI;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -112,7 +113,6 @@ public class Robot extends TimedRobot {
 
   /* Called once at the beginning of the robot program. */
   /* ---------------------------------------------------------------------------------------- */
-
   /* ---------------------------------------------------------------------------------------- */
   public Robot() {
     // We need to invert one side of the drivetrain so that positive voltages
@@ -132,7 +132,7 @@ public class Robot extends TimedRobot {
     runIntakeInConfig.inverted(false);
     runIntakeOutConfig.inverted(true);
 
-    // camera config if camera
+    // camera config 
     // CameraServer.startAutomaticCapture();
 
     // end of Robot class
@@ -141,10 +141,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    System.out.println("up");
+    System.out.println(m_intakeUpLimitSwitch.get());
+    System.out.println("down");
+    System.out.println(m_intakeDownLimitSwitch.get());
     // this runs once at the start of teleop
     
+    //System.out.println("");
+    //System.out.println();
     // kill auto
     m_deployIntakeMotor.set(0);
+    // m_climbMotor.set(0);
     m_backKickMotor.set(0);
     m_runIntakeMotor.set(0);
     m_shootMotor.set(0);
@@ -202,6 +209,27 @@ public class Robot extends TimedRobot {
         (m_controller.getLeftTriggerAxis() < .5) & (Timer.getTimestamp() - deployIntakeTime) > 0.2) {
           deployIntakeTime = Timer.getTimestamp();
       }
+
+      /*if (m_intakeIsMoving & !m_intakeDownLimitSwitch.get()) {
+        // double count = (m_intakeStartTime - Timer.getMatchTime());
+        double intakeMotorSpeed = Intake.kDeployMotorMaxSpeed - (Intake.kDeployMotorMinSpeed * count * Intake.kIntakeSpeedMultiplier);
+        m_deployIntakeMotor.set(intakeMotorSpeed);
+
+        System.out.println("intakeaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeeeeee");
+        System.out.println(Timer.getMatchTime());
+        System.out.println(m_intakeStartTime);
+        System.out.println(count);
+        System.out.println(intakeMotorSpeed);
+        System.out.println(m_deployIntakeMotor.get());
+
+        if (intakeMotorSpeed <= Intake.kDeployMotorMinSpeed) {
+          m_deployIntakeMotor.set(0);
+          m_intakeIsMoving = false;
+          System.out.println("deploy intake stop");
+        }
+
+        count += 1;
+      }*/
       
       if (m_controller.getBButton() & 
         m_intakeUpLimitSwitch.get()) {
@@ -306,6 +334,25 @@ public class Robot extends TimedRobot {
   @SuppressWarnings("unused")
   @Override 
   public void autonomousPeriodic() {
+
+    // if (m_controller.getLeftStickButton() & m_controller.getRightStickButton()) {
+    //   System.out.println("Auto stop");
+    //   m_deployIntakeMotor.set(0);
+    //   // m_climbMotor.set(0);
+    //   m_backKickMotor.set(0);
+    //   m_runIntakeMotor.set(0);
+    //   m_shootMotor.set(0);
+    //   m_robotDrive.arcadeDrive(0, 0);
+    //   m_robotDrive2.arcadeDrive(0, 0);
+    //   // while (m_controller.getRightStickButton() & m_controller.getLeftStickButton()) {
+    //   //   m_deployIntakeMotor.set(0);
+    //   //   // m_climbMotor.set(0);
+    //   //   m_backKickMotor.set(0);
+    //   //   m_runIntakeMotor.set(0);
+    //   //   m_shootMotor.set(0);
+    //   //   m_robotDrive.arcadeDrive(0, 0);
+    //   //   m_robotDrive2.arcadeDrive(0, 0);}
+    // }
 
      /* -------------------------------------------------------- */
      // AUTO #1
@@ -419,41 +466,23 @@ public class Robot extends TimedRobot {
    // middle
    // drive & shoot
    /* ------------------------------------------------------------------------------------ */
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 19.3) {
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 16) {
     m_shootMotor.set(1);
     // shoot motor
    }
-   
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 19) {
-    m_backKickMotor.set(-Shoot.kKickMotorSpeed);
-   }
 
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() == 19) {
-    m_backKickMotor.set(0);
-   }
-
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 19 & Timer.getMatchTime() > 16) {
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 19.3 & Timer.getMatchTime() > 16) {
     // kick motor
     m_backKickMotor.set(Shoot.kKickMotorSpeed);
     m_shootMotor.set(Shoot.kRunMotorSpeed);
    }
 
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 15.7 & Timer.getMatchTime() < 16) {
+   if (Auto.kautoVariable == 6 & Timer.getMatchTime() > 14.5 & Timer.getMatchTime() < 16) {
     m_robotDrive2.arcadeDrive(0.5,0);
     m_robotDrive.arcadeDrive(0.5, 0);
     m_shootMotor.set(0);
     m_backKickMotor.set(0);
    }
-
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 16 & 
-    Timer.getMatchTime() > 15.5 & m_intakeDownLimitSwitch.get()) {
-      m_deployIntakeMotor.set(Intake.kDeployMotorUpSpeed);
-   }
-
-   if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 15.7 & 
-    Timer.getMatchTime() > 15 & m_intakeUpLimitSwitch.get()) {
-      m_deployIntakeMotor.set(Intake.kDeployMotorDownSpeed);
-    }
 
    if (Auto.kautoVariable == 6 & Timer.getMatchTime() < 14.5) {
     m_robotDrive.arcadeDrive(0, 0);
